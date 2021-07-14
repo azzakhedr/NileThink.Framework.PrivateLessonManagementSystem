@@ -1,0 +1,70 @@
+﻿
+@model NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.EmailContract
+@{
+    ViewBag.Title = "AcceptTrainer";
+    Layout = "~/Views/Shared/_Email.cshtml";
+}
+
+<h2 style="color: #008a4c; line-height: 25px;">تطبيق درس خصوصي</h2>
+<div style="font: normal 9pt tahoma, Geneva, sans-serif; background: #f0f0f0; border: 1px solid #f0f0f0; color: #444; line-height: 18px; margin: 20px 0; padding: 10px;">
+    السلام عليكم
+    <br />
+    <p><strong style="width:150px;">المرسل</strong>: @Model.from</p>
+    <p><strong style="width:150px;">تاريخ الطلب</strong>: @Model.cdate</p>
+    <br />
+    @{ if (Model.status == 0)
+        {
+            <p>لقد تم ارسال طلب من قبل الطالب   <strong> @Model.from </strong> يطلب فيها درس خصوصي حسب المواصفات المرفقة في الايميل التالي :  </p>
+        }
+        else if (Model.status == 1)
+        {
+            <p>لقد تم الموافقة على طلبك من قبل المعلم   <strong> @Model.from </strong> يرجى مراجعة بيانات العقد التالية وابداء الراي بالموافقة أو الرفض :  </p>
+        }
+    }
+
+</div>
+    <section id='email' style="font: normal 9pt tahoma, Geneva, sans-serif; background: #f0f0f0; border: 1px solid #f0f0f0; color: #444; line-height: 18px; margin: 20px 0; padding: 10px;">
+        <table cellspacing = '0' cellpadding = '25' border = '1' style = 'font-family: Arial, sans-serif; text-align: center;'> 
+            
+            <tbody>               
+                <tr>
+                    <td style='border: 1px solid rgb(0, 0, 0); width:150px'> المادة المطلوبة </td>
+                    <td style='border: 1px solid rgb(0, 0, 0); width:250px'> @Model.material  </td>
+                </tr>
+                <tr>
+                    <td style='border: 1px solid rgb(0, 0, 0); width:150px'> طريقة التدريس </td>
+                    <td style='border: 1px solid rgb(0, 0, 0); width:250px'>@Model.teaching_mechanism</td>
+                </tr>
+                <tr>
+                    <td style='border: 1px solid rgb(0, 0, 0); width:150px'> المدة المطلوبة </td>
+                    <td style='border: 1px solid rgb(0, 0, 0); width:250px'>@Model.period</td>
+                </tr>
+                <tr>
+                    <td style='border: 1px solid rgb(0, 0, 0); width:150px'> يحتاج الى اتصال تجريبي </td>
+                    <td style='border: 1px solid rgb(0, 0, 0); width:250px'> @Model.is_test </td>
+                </tr>
+                <tr>
+                    <td style='border: 1px solid rgb(0, 0, 0); width:150px'> بداية الدروس </td>
+                    <td style='border: 1px solid rgb(0, 0, 0); width:250px'>  @(string.Format("{0:MM/dd/yyyy}", Model.start_date)) </td>
+                </tr>
+
+                <tr>
+                    <td style='border: 1px solid rgb(0, 0, 0); width:150px'> وقت الدروس </td>
+                    <td style='border: 1px solid rgb(0, 0, 0); width:250px'>  @Model.start_time </td>
+                </tr>
+                @if (!string.IsNullOrEmpty(Model.cost))
+                {
+                    <tr>
+                        <td style='border: 1px solid rgb(0, 0, 0); width:150px'> مبلغ الدرس للدرس الواحد </td>
+                        <td style='border: 1px solid rgb(0, 0, 0); width:250px'>  @Model.cost </td>
+                    </tr>
+                }
+
+                <tr>
+                    <td style='border: 1px solid rgb(0, 0, 0); width:150px'> تفاصيل اضافية </td>
+                    <td style='border: 1px solid rgb(0, 0, 0); width:250px'>  @Model.details </td>
+                </tr>               
+            </tbody>
+        </table>
+        </section>
+        <br />

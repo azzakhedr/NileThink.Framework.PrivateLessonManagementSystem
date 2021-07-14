@@ -1,0 +1,236 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin2.cshtml";
+}
+
+<div class="row">
+    <div id="status_message" class="col-lg-12">@Html.Action(actionName: "TempMessage", controllerName: "Shared", routeValues: new { area = "" })</div>
+    <div class="col-lg-12">
+
+        <!--begin::Portlet-->
+        <div class="m-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <span class="m-portlet__head-icon m--hide">
+                            <i class="la la-gear"></i>
+                        </span>
+                        <h3 class="m-portlet__head-text">
+                            اضافة درس جديد
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <!--begin::Form-->
+            <form class="m-form m-form--fit" action="@Url.Action("Create")" method="post" enctype="multipart/form-data">
+                <div class="m-portlet__body">
+                    <div class="m-form__section m-form__section--first">
+                        <div class="m-form__heading">
+                            <h3 class="m-form__heading-title">1. البيانات الأساسية : </h3>
+                        </div>
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-12">
+                                <label for="example_input_full_name">عنوان الدرس </label>
+                                <input type="text" class="form-control m-input" name="title" required>
+                                <span class="m-form__help">يجب أن يكون العنوان واضح ومعبر</span>
+                            </div>
+                        </div>
+                        <input type="hidden" class="form-control m-input" name="request_id" value="@Request.QueryString["req"]">
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-6">
+                                <label>تاريخ بداية  الدرس والوقت</label>
+                                <input type="text" class="form-control m-input" name="start_date" id="m_datetimepicker_1" autocomplete="off" required>
+                                <span class="m-form__help">تاريخ بداية الدرس يجب أن يكون قبل 12 ساعة على الأقل</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label>طريقة التدريس</label>
+                                <div class="m-input-icon m-input-icon--left">
+                                    <select class="form-control m-input" name="teaching_mechanism" required>
+                                        <option value="">-- اختر طريقة التدريس --</option>
+                                        <option value="online">أونلاين</option>
+                                        <option value="onsite">في المكان</option>
+                                    </select>
+                                </div>
+                                <span class="m-form__help">طريقة التدريس حسب الألية المتبعة باستخدام الفيديو والصوت أو بالذهاب لموقع اللقاء</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-6">
+                                <label>مدة الدرس بالأيام</label>
+                                <input type="text" class="form-control m-input" name="period" required>
+                                <span class="m-form__help">تكون مدة الدرس بالأيام حسب عدد الأيام التي يتم فيها تنفيذ الدرس</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label>عدد الطلاب المسموح المشاركة بها</label>
+                                <input type="text" class="form-control m-input" name="total_std" required>
+                                <span class="m-form__help">عدد الطلاب التي سيتم اشراكهم في الدرس</span>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-6">
+                                <label>عدد المحاضرات المتفق عليه</label>
+                                <input type="text" class="form-control m-input" name="lectures_count" required>
+                                <span class="m-form__help">عدد المحاضرات المتفق عليه مع الطالب</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label>مبلغ الدرس لكل محاضرة </label>
+                                <input type="text" class="form-control m-input" name="cost" required>
+                                <span class="m-form__help">المبلغ المحدد عن كل يوم بمعني قيمة المحاضرة الواحدة 30 ريال </span>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-12">
+                                <label>نبذة عن الدرس التدريبية</label>
+                                <textarea class="form-control m-input" name="details" rows="10" required></textarea>
+                                <span class="m-form__help">نبذة عن الدرس التدريبية ومحتواها</span>
+                            </div>
+                        </div>
+                        @*<div class="m-form__group form-group">
+                                <label for="">Communication:</label>
+                                <div class="m-checkbox-list">
+                                    <label class="m-checkbox">
+                                        <input type="checkbox"> Email
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox">
+                                        <input type="checkbox"> SMS
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox">
+                                        <input type="checkbox"> Phone
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>*@
+                    </div>
+                    <div class="m-form__seperator m-form__seperator--dashed"></div>
+                    <div class="m-form__section m-form__section--last">
+                        <div class="m-form__heading">
+                            <h3 class="m-form__heading-title">2. جدولة المواعيد للدرس :</h3>
+                        </div>
+                        <div id="mySch">
+                            <div class="form-group m-form__group row">
+                                <div class="col-md-6">
+                                    <label>يرجى تاريخ ووقت الدروس</label>
+                                    <input class="form-control m-input m_datetimepicker_sch" name="schedual[]" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label style="display:block">&nbsp;</label>
+                                    <a href="JavaScript:Void(0)" class="btn btn-primary m-btn m-btn--icon m-btn--icon-only addSch">
+                                        <i class="la la-plus"></i>
+                                    </a>
+                                    <a href="JavaScript:Void(0)" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only trashSch">
+                                        <i class="la la-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="m-form__group form-group">
+                                <label for="">أيام الدرس المعتمدة  :</label>
+                                <div class="m-radio-list">
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" name="course_day"> السبت
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" name="course_day"> الأحد
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" name="course_day"> الاثنين
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" name="course_day"> الثلاثاء
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" name="course_day"> الأربعاء
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" name="course_day"> الخميس
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" name="course_day"> الجمعة
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <span class="m-form__help">يرجى اختيار الأيام التي يتم فيها اللقاء بشكل مبدئي ويمكنك تغييره فيما بعد</span>
+                            </div>*@
+                        <br />
+                    </div>
+
+                    <div class="m-form__seperator m-form__seperator--dashed"></div>
+                    <div class="m-form__section m-form__section--last">
+                        @*<div class="m-form__heading">
+                                <h3 class="m-form__heading-title">2. جدولة المواعيد للدرس :</h3>
+                            </div>*@
+                        <div class="m-form__group form-group">
+                            <label for="">التقنية المستخدمة في المحاضرات  :</label>
+                            <div class="m-radio-list">
+                                <label class="m-radio">
+                                    <input type="radio" name="live_type" value="audio"> الصوت فقط
+                                    <span></span>
+                                </label>
+                                <label class="m-radio">
+                                    <input type="radio" name="live_type" value="video"> الصوت والفيديو
+                                    <span></span>
+                                </label>
+                                <label class="m-radio">
+                                    <input type="radio" name="live_type" value="both"> صوت + فيديو + السبورة الالكترونية
+                                    <span></span>
+                                </label>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="m-portlet__foot m-portlet__no-border m-portlet__foot--fit">
+                    <div class="m-form__actions m-form__actions--solid">
+                        <button type="submit" class="btn btn-success">حفظ المتغيرات</button>
+                        <button type="reset" class="btn btn-secondary">الغاء الأمر</button>
+                    </div>
+                </div>
+            </form>
+
+            <!--end::Form-->
+        </div>
+
+        <!--end::Portlet-->
+    </div>
+</div>
+@section scripts{
+    <script src="~/assets/demo/default/custom/crud/forms/widgets/bootstrap-datetimepicker.js" type="text/javascript"></script>
+    <script>
+        $(".m_datetimepicker_sch").datetimepicker({ todayHighlight: !0, autoclose: !0, format: "yyyy.mm.dd hh:ii" });
+        $(document).on('click', '.addSch', function () {
+            var elemnt = '';
+            elemnt += '<div class="form-group m-form__group row">';
+            elemnt += '<div class="col-md-6">';
+            elemnt += '<label>يرجى تاريخ ووقت الدروس</label>';
+            elemnt += '<input class="form-control m-input m_datetimepicker_sch" name="schedual[]" />';
+            elemnt += '</div>';
+            elemnt += '<div class="col-md-4">';
+            elemnt += '<label style="display:block">&nbsp;</label>';
+            elemnt += '<a href="JavaScript:Void(0)" class="btn btn-primary m-btn m-btn--icon m-btn--icon-only addSch">';
+            elemnt += ' <i class="la la-plus"></i>';
+            elemnt += '</a>';
+            elemnt += '<a href="JavaScript:Void(0)" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only trashSch">';
+            elemnt += ' <i class="la la-trash"></i>';
+            elemnt += '</a>';
+            elemnt += '</div>';
+            elemnt += '</div>';
+            $("#mySch").append(elemnt);
+            $(".m_datetimepicker_sch").datetimepicker({ todayHighlight: !0, autoclose: !0, format: "yyyy.mm.dd hh:ii" });
+        });
+    </script>
+}

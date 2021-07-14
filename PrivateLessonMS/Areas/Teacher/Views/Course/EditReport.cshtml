@@ -1,0 +1,89 @@
+﻿@model NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.RatingVM
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin2.cshtml";
+   
+}
+
+<div class="row">
+    <div id="status_message" class="col-lg-12">@Html.Action(actionName: "TempMessage", controllerName: "Shared", routeValues: new { area = "" })</div>
+    <div class="col-lg-12">
+
+        <!--begin::Portlet-->
+        <div class="m-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <span class="m-portlet__head-icon m--hide">
+                            <i class="la la-gear"></i>
+                        </span>
+                        <h3 class="m-portlet__head-text">
+                            ;كتابة تقرير الطالب  : @ViewBag.fullname
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <!--begin::Form-->
+            <form class="m-form m-form--fit" action="@Url.Action("EditReport")" method="post" enctype="multipart/form-data">
+                <div class="m-portlet__body">                
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-6">
+                                <label for="example_input_full_name">اسم الطالب</label>
+                                <input type="text" class="form-control m-input" name="first_name" value="@ViewBag.fullname" disabled>
+
+                            </div>
+                            <div class="col-md-6">
+                                <label for="example_input_full_name">البريد الالكتروني </label>
+                                <input type="text" class="form-control m-input" name="last_name" value="@ViewBag.email" disabled>
+
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-6">
+                                <label for="example_input_full_name">رقم الجوال </label>
+                                <input type="text" class="form-control m-input" name="email" value="@ViewBag.phonenumber" disabled>
+
+                            </div>
+                            <div class="col-md-6">
+                                <label for="example_input_full_name">تقييم الطالب من 5 نقاط </label>
+                                <select name="rate" class="form-control m-input" required>
+                                    <option value="">-- اختر التقييم --</option>
+                                    <option value="1" @(Model !=null && Model.rate == 1?"selected":"")>1</option>
+                                    <option value="2" @(Model !=null && Model.rate == 2?"selected":"")>2</option>
+                                    <option value="3" @(Model !=null && Model.rate == 3?"selected":"")>3</option>
+                                    <option value="4" @(Model !=null && Model.rate == 4?"selected":"")>4</option>
+                                    <option value="5" @(Model !=null && Model.rate == 5?"selected":"")>5</option>
+                                </select>                                
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-12">
+                                <label>تفاصيل التقرير </label>
+                                <textarea name="report" class="form-control m-input" rows="15">@(Model !=null? Model.report:"")</textarea>
+                            </div>                           
+                        </div>
+                    </div>
+                         <input name="course_id" type="hidden" value="@Request.QueryString["cid"]" />
+                         <input name="std_id" type="hidden" value="@Request.QueryString["std"]" />
+                </div>
+                <div class="m-portlet__foot m-portlet__no-border m-portlet__foot--fit">
+                    <div class="m-form__actions m-form__actions--solid">
+                        <button type="submit" class="btn btn-success">حفظ المتغيرات</button>
+                        <button type="reset" class="btn btn-secondary">الغاء الأمر</button>
+                    </div>
+                </div>
+            </form>
+
+            <!--end::Form-->
+        </div>
+
+        <!--end::Portlet-->
+    </div>
+</div>
+@section scripts{
+    <script src="~/assets/demo/default/custom/crud/forms/widgets/bootstrap-datetimepicker.js" type="text/javascript"></script>
+    <script>
+        $(".m_datetimepicker_7").datetimepicker({ format: "hh:ii", showMeridian: !0, todayHighlight: !0, autoclose: !0, startView: 1, minView: 0, maxView: 1, forceParse: 0, pickerPosition: "bottom-left" });
+    </script>
+}

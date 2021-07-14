@@ -1,0 +1,77 @@
+﻿
+<div id="m_ver_menu" class="m-aside-menu  m-aside-menu--skin-light m-aside-menu--submenu-skin-light " m-menu-vertical="1" m-menu-scrollable="0" m-menu-dropdown-timeout="500"> 
+    <ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow ">
+        <li class="m-menu__item " aria-haspopup="true"><a href="@Url.Action("Index","DashBoard")" class="m-menu__link "><i class="m-menu__link-icon flaticon-home"></i><span class="m-menu__link-text">الصفحة الرئيسية</span></a></li>
+        @*<li class="m-menu__section m-menu__section--first">
+            <h4 class="m-menu__section-text">مستخدمي النظام</h4>
+            <i class="m-menu__section-icon flaticon-more-v2"></i>
+        </li>*@
+        <li class="m-menu__item m-menu__item--submenu m-menu__item--open" aria-haspopup="true" m-menu-submenu-toggle="hover">
+            <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                <i class="m-menu__link-icon flaticon-user-add"></i><span class="m-menu__link-text">ادارة البيانات الشخصية</span><i class="m-menu__ver-arrow la la-angle-right"></i>
+            </a>
+            <div class="m-menu__submenu ">
+                <span class="m-menu__arrow"></span>
+                <ul class="m-menu__subnav">
+                    <li class="m-menu__item " aria-haspopup="true"><a href="@Url.Action("Edit","Account")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">عرض بياناتي الشخصية</span></a></li>
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Change_password","Account")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">تغيير كلمة المرور</span></a></li>
+                    @*<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Banks","Account")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">الحسابات البنكية</span></a></li>*@
+                    @*<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="inner.html" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">صلاحيات المستخدمين</span></a></li>*@
+                </ul>
+            </div>
+        </li>
+        <li class="m-menu__item m-menu__item--submenu m-menu__item--open" aria-haspopup="true" m-menu-submenu-toggle="hover" m-menu-link-redirect="1">
+            <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                <i class="m-menu__link-icon flaticon-interface-3"></i><span class="m-menu__link-title"><span class="m-menu__link-wrap"> <span class="m-menu__link-text">ادارة الدورات والدروس</span></span></span><i class="m-menu__ver-arrow la la-angle-right"></i>
+            </a>
+            <div class="m-menu__submenu ">
+                <span class="m-menu__arrow"></span>
+                <ul class="m-menu__subnav">
+                    <li class="m-menu__item " aria-haspopup="true"><a href="@Url.Action("Index","Course")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">عرض كافة الدورات</span></a></li>
+                    @*<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Create","Course")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">اضافة دورة جديدة </span></a></li>
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Upcomming","Course")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">الدورات القادمة</span></a></li>
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Finished","Course")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">الدورات المنتخية</span></a></li>*@
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Calendar","Course")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">تقويم الدورات</span></a></li>
+                    @*<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Testing","Course")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">اختبار الصوت والصورة</span></a></li>*@
+                </ul>
+            </div>
+        </li>
+
+        @*<li class="m-menu__item m-menu__item--submenu m-menu__item--open" aria-haspopup="true" m-menu-submenu-toggle="hover" m-menu-link-redirect="1">
+            <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                <i class="m-menu__link-icon flaticon-avatar"></i><span class="m-menu__link-title"><span class="m-menu__link-wrap"> <span class="m-menu__link-text">ادارة الحسابات المالية </span></span></span><i class="m-menu__ver-arrow la la-angle-right"></i>
+            </a>
+            <div class="m-menu__submenu ">
+                <span class="m-menu__arrow"></span>
+                <ul class="m-menu__subnav">
+                    <li class="m-menu__item " aria-haspopup="true"><a href="@Url.Action("Index","Payments")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">عرض كافة الحسابات </span></a></li>
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Done","Payments")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">مبالغ مستلمة</span></a></li>
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("UnFinish","Payments")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">مبالغ غير مستلمة</span></a></li>
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("finish_package","Providers")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">اشتراكات شارفت على النهاية</span></a></li>
+                </ul>
+            </div>
+        </li>*@
+
+        @*<li class="m-menu__item m-menu__item--submenu m-menu__item--open" aria-haspopup="true" m-menu-submenu-toggle="hover" m-menu-link-redirect="1">
+            <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                <i class="m-menu__link-icon flaticon-network"></i><span class="m-menu__link-title"><span class="m-menu__link-wrap"> <span class="m-menu__link-text">ادارة الشركات</span></span></span><i class="m-menu__ver-arrow la la-angle-right"></i>
+            </a>
+            <div class="m-menu__submenu ">
+                <span class="m-menu__arrow"></span>
+                <ul class="m-menu__subnav">
+                    <li class="m-menu__item " aria-haspopup="true"><a href="@Url.Action("Index","Company")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">عرض كافة الشركات</span></a></li>
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Create","Company")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">اضافة شركة جديدة</span></a></li>
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Requsts","Company")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i><span class="m-menu__link-text">طلبات الشركات</span></a></li>
+                </ul>
+            </div>
+        </li>*@
+        @*<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Index","Site")" class="m-menu__link "><i class="m-menu__link-icon flaticon-cogwheel"></i><span class="m-menu__link-text">ادارة الموقع الالكتروني</span></a></li>
+        <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Index","Payments")" class="m-menu__link "><i class="m-menu__link-icon flaticon-coins"></i><span class="m-menu__link-text">ادارة الطلبات المالية</span></a></li>
+        <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Index","Notifications")" class="m-menu__link "><i class="m-menu__link-icon flaticon-alert"></i><span class="m-menu__link-text">ارسال اشعار</span></a></li>
+        <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Index", "Setting")" class="m-menu__link "><i class="m-menu__link-icon flaticon-cogwheel"></i><span class="m-menu__link-text">الاعدادات العامة للنظام</span></a></li>*@
+
+        @*<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Log", "Setting")" class="m-menu__link "><i class="m-menu__link-icon flaticon-file-2"></i><span class="m-menu__link-text">سجل أحداث النظام</span></a></li>*@
+
+
+    </ul>
+</div>

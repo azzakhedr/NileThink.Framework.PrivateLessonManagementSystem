@@ -1,0 +1,22 @@
+﻿
+@model NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.emailInviteT
+@{
+    ViewBag.Title = "AcceptTrainer";
+    Layout = "~/Views/Shared/_Email.cshtml";
+}
+
+<h2 style="color: #008a4c; line-height: 25px;">تطبيق درس خصوصي</h2>
+<div style="font: normal 9pt tahoma, Geneva, sans-serif; background: #f0f0f0; border: 1px solid #f0f0f0; color: #444; line-height: 18px; margin: 20px 0; padding: 10px;">
+    السلام عليكم
+    <br />
+    <p><strong style="width:150px;">المرسل</strong>: @Model.from</p>
+    <p><strong style="width:150px;">تاريخ الدعوة</strong>: @Model.cdate</p>
+    <br />
+    <p>@Model.msg</p>
+    <br/>
+    @if (!string.IsNullOrEmpty(Model.password)) { 
+        <p>بيانات الدخول الخاصة بك  هي : </p>
+        <p><strong style="width:150px;">اسم المستخدم</strong>: @Model.username</p>
+        <p><strong style="width:150px;">كلمة المرور</strong>: @Model.password</p>
+    }
+</div>

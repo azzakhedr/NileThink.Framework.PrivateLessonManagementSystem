@@ -1,0 +1,38 @@
+﻿@model NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.StudentVM
+
+<table style="width:100%" border="1">
+    <tr>
+        <td>الاسم </td>
+        <td>@(string.IsNullOrEmpty(Model.fullName) ? Model.firstName + " " + Model.lastName : Model.fullName)</td>
+    </tr>
+    <tr>
+        <td>رقم الجوال</td>
+        <td>@Model.mobile</td>
+    </tr>
+    <tr>
+        <td>البريد الالكتروني</td>
+        <td>@Model.email</td>
+    </tr>
+    <tr>
+        <td>الجنس</td>
+        <td>@Model.gender</td>
+    </tr>
+    <tr>
+        <td>مدينة الاقامة</td>
+        <td>@Model.city</td>
+    </tr>
+    <tr>
+        <td>تاريخ الميلاد</td>
+        <td>@Model.birthDate</td>
+    </tr>
+    <tr>
+        <td>الدورات المسجلة </td>
+        <td>@{ foreach (var x in ViewBag.course)
+            {
+                <p>@x.value</p>
+            }
+        }</td>
+    </tr>
+
+</table>
+           

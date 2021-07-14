@@ -1,0 +1,153 @@
+﻿@Html.Partial("~/Areas/Admin/Views/Shared/_header2.cshtml")
+@{ 
+    if (Session["User"] == null)
+    {
+        Response.Redirect("~/Account/Login");
+    }
+    PrivateLessonMS.Models.ApplicationUser user = (PrivateLessonMS.Models.ApplicationUser)Session["User"];
+}
+<!-- begin::Body -->
+    <!-- END: Left Aside -->
+    <!-- begin::Body -->
+    <div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
+
+        <!-- BEGIN: Left Aside -->
+        <button class="m-aside-left-close  m-aside-left-close--skin-light " id="m_aside_left_close_btn"><i class="la la-close"></i></button>
+        <div id="m_aside_left" class="m-grid__item	m-aside-left  m-aside-left--skin-light ">
+
+            <!-- BEGIN: Brand -->
+            <div class="m-brand  m-brand--skin-light ">
+                <a href="@Url.Action("Index","DashBoard")" class="m-brand__logo">
+                    <img alt="" src="~/assets/logo_color.png" style="padding:2px;" />
+                </a>
+            </div>
+
+            <!-- END: Brand -->
+            <!-- BEGIN: Aside Menu -->
+            <div id="m_ver_menu" class="m-aside-menu  m-aside-menu--skin-light m-aside-menu--submenu-skin-light " data-menu-vertical="true" m-menu-scrollable="true" m-menu-dropdown-timeout="500">
+                <ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow ">
+                    <li class="m-menu__item  m-menu__item--submenu m-menu__item--submenu-fullheight" aria-haspopup="true" m-menu-submenu-toggle="click" m-menu-dropdown-toggle-class="m-aside-menu-overlay--on">
+                        <a href="@Url.Action("Index","Dashboard")" class="m-menu__link">
+                            <i class="m-menu__link-icon flaticon-line-graph"></i><span class="m-menu__link-text">ألية عمل النظام</span><i class="m-menu__ver-arrow la la-angle-right"></i>
+                        </a>
+                        @*<div class="m-menu__submenu ">
+                            <span class="m-menu__arrow"></span>
+                            <div class="m-menu__wrapper">
+                                <ul class="m-menu__subnav">
+                                    <li class="m-menu__item  m-menu__item--parent m-menu__item--submenu-fullheight" aria-haspopup="true"><span class="m-menu__link"><span class="m-menu__link-text">شرح ألية العمل</span></span></li>                                   
+                                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="#" class="m-menu__link "><span class="m-menu__link-text">ألية اضافة دورة جديدة</span></a></li>
+                                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="#" class="m-menu__link "><span class="m-menu__link-text">ألية الموافقة على الطلبات</span></a></li>
+                                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="#" class="m-menu__link "><span class="m-menu__link-text">ألية عمل اللايف</span></a></li>
+                                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="#" class="m-menu__link "><span class="m-menu__link-text">ألية عمل الشات</span></a></li>
+
+                                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="#" class="m-menu__link "><span class="m-menu__link-text">ألية اضافة طلاب</span></a></li>
+                                </ul>
+                            </div>
+                        </div>*@
+                    </li>
+                    @*<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="click" m-menu-link-redirect="1">
+                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                            <i class="m-menu__link-icon flaticon-add"></i><span class="m-menu__link-text">الاضافات</span><i class="m-menu__ver-arrow la la-angle-right"></i>
+                        </a>
+                        <div class="m-menu__submenu ">
+                            <span class="m-menu__arrow"></span>
+                            <ul class="m-menu__subnav">
+                                <li class="m-menu__item  m-menu__item--parent" aria-haspopup="true" m-menu-link-redirect="1"><span class="m-menu__link"><span class="m-menu__link-text">اضافة درس جديدة</span></span></li>
+                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Create","Courses")" class="m-menu__link "><i class="m-menu__link-icon la la-commenting"></i><span class="m-menu__link-text">اضافة طالب لدرس</span></a></li>
+                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Invites_Std","Students")" class="m-menu__link "><i class="m-menu__link-icon la la-user"></i><span class="m-menu__link-text">دعوة طالب </span></a></li>
+                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Invites_Teacher","Teachers")" class="m-menu__link "><i class="m-menu__link-icon la la-cart-arrow-down"></i><span class="m-menu__link-text">دعوة معلم </span></a></li>                                
+                            </ul>
+                        </div>
+                    </li>*@
+                    <li class="m-menu__item  m-menu__item--submenu m-menu__item--bottom" aria-haspopup="true" m-menu-submenu-toggle="click" m-menu-link-redirect="1">
+                        <a href="@Url.Action("Calendar","Courses")" class="m-menu__link">
+                            <i class="m-menu__link-icon flaticon-stopwatch"></i>
+                        </a>                        
+                    </li>
+                    <li class="m-menu__item  m-menu__item--submenu m-menu__item--bottom-2" aria-haspopup="true" m-menu-submenu-toggle="click">
+                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                            <i class="m-menu__link-icon flaticon-settings"></i><span class="m-menu__link-text">Settings</span><i class="m-menu__ver-arrow la la-angle-right"></i>
+                        </a>
+                        <div class="m-menu__submenu m-menu__submenu--up">
+                            <span class="m-menu__arrow"></span>
+                            <ul class="m-menu__subnav">
+                                <li class="m-menu__item  m-menu__item--parent m-menu__item--bottom-2" aria-haspopup="true"><span class="m-menu__link"><span class="m-menu__link-text">الاعدادات</span></span></li>
+                                <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover" m-menu-link-redirect="1">
+                                    <a href="@Url.Action("Edit","Users",new { id=user.Id})" class="m-menu__link">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--line"><span></span></i><span class="m-menu__link-text">ملفي الشخصي</span>
+                                    </a>
+                                </li>
+                                @*<li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Faqs","Account")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--line"><span></span></i><span class="m-menu__link-text">اسئلة شائعة</span></a></li>*@
+                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1"><a href="@Url.Action("Change_Password","Users")" class="m-menu__link "><i class="m-menu__link-bullet m-menu__link-bullet--line"><span></span></i><span class="m-menu__link-text">تغيير كلمة المرور</span></a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    @*<li class="m-menu__item  m-menu__item--submenu m-menu__item--bottom-1" aria-haspopup="true" m-menu-submenu-toggle="click">
+                        <a href="@Url.Action("Contact","Account")" class="m-menu__link">
+                            <i class="m-menu__link-icon flaticon-info"></i><span class="m-menu__link-text"></span><i class="m-menu__ver-arrow la la-angle-right"></i>
+                        </a>                      
+                    </li>*@
+                </ul>
+            </div>
+
+            <!-- END: Aside Menu -->
+        </div>
+        <div class="m-aside-menu-overlay"></div>
+
+        <!-- END: Left Aside -->
+        <div class="m-grid__item m-grid__item--fluid m-wrapper">
+
+            <!-- BEGIN: Subheader -->
+            <div class="m-subheader ">
+                <div class="d-flex align-items-center">
+                    @*<div class="mr-auto">
+                        <h3 class="m-subheader__title m-subheader__title--separator">لوحة الادارة</h3>
+                        <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                            <li class="m-nav__item m-nav__item--home">
+            <a href="#" class="m-nav__link m-nav__link--icon">
+                <i class="m-nav__link-icon la la-home"></i>
+            </a>
+        </li>
+        <li class="m-nav__separator">-</li>
+                            <li class="m-nav__item">
+                                <a href="" class="m-nav__link">
+                                    <span class="m-nav__link-text">الرئيسية</span>
+                                </a>
+                            </li>
+                            <li class="m-nav__separator">-</li>
+                            <li class="m-nav__item">
+                                <a href="" class="m-nav__link">
+                                    <span class="m-nav__link-text">مدير النظام</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>*@
+                    @*<div>
+                        <span class="m-subheader__daterange" id="m_dashboard_daterangepicker">
+                            <span class="m-subheader__daterange-label">
+                                <span class="m-subheader__daterange-title"></span>
+                                <span class="m-subheader__daterange-date m--font-brand"></span>
+                            </span>
+                            <a href="#" class="btn btn-sm btn-brand m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
+                                <i class="la la-angle-down"></i>
+                            </a>
+                        </span>
+                    </div>*@
+                </div>
+            </div>
+
+            <!-- END: Subheader -->
+            <div class="m-content">
+                @RenderBody()
+
+            </div>
+        </div>
+    </div>
+                @Html.Partial("~/Areas/admin/Views/Shared/_footer2.cshtml")
+                @RenderSection("scripts", false)
+                <script src="~/assets/app/js/my-script.js"></script>
+                <!--end::Page Scripts -->
+    </body>
+                <!-- end::Body -->
+</html>
+

@@ -1,0 +1,16 @@
+﻿@model NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.RegEmail
+@{
+    ViewBag.Title = "NewAdmin";
+    Layout = "~/Views/Shared/_Email.cshtml";
+}
+
+<span style="font-weight: bold;font-family:tahoma;"> عزيزي المستخدم: @(Model.firstname+" "+ Model.lastname)</span>
+<div style="font-size:15px; margin-top:20px;font-family:tahoma;">
+    <p><strong>التاريخ  @Model.cdate</strong></p>
+    <p><strong>أهلا وسهلاً بك  @Model.type</strong></p>
+    <p>@Model.message</p>
+
+
+
+
+

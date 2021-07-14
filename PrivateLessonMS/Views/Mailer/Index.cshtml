@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Email.cshtml";
+}
+
+<span style="font-weight: bold;font-family:tahoma;"> عزيزي المستخدم: @Request.QueryString["user"]</span>
+<div style="font-size:15px; margin-top:20px;font-family:tahoma;">
+    نعتذر لك على رفض طلبك الخاص بحجز شاليه
+    <!-- 1. When Chalet owner accept client reservation  or 2.when client add request -->
+    <span style="color: #489e69;font-family:tahoma;">« @Request.QueryString["lounge"] »</span>
+    وذلك يرجع لأسباب خاصة بمالك الاستراحة يمكنك طلب شاليه أخر من خلال التطبيق
+    <p><span style="font-weight: bold;font-family:tahoma;"> ملاحظات أخرى من المالك</span><br />  @Request.QueryString["response"]</p>
+    @*<a href="##" target="_blank" style="width: 150px; height: 40px;padding-right: 20px; padding-left: 20px; padding-top: 13px;
+             padding-bottom: 15px; background-color: #53b77a;color: #fff;text-decoration: none; margin-right: 30px;  margin-left: 20px;
+              -moz-border-radius: 4px; -webkit-border-radius: 4px;  border-radius: 4px;font-family:tahoma;">رفض تأكيد  الطلب</a>
+
+        <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=حجز استراحة الياسمين&dates=20151122/20151123&تم حجز استراحة الياسمين في هذا التاريخ لحق روح&location=الرياض&add=dsf&trp=false&sprop=test+website&sprop=name:sdfsdf&pli=1&sf=true&output=xml" style="width: 150px;  height: 40px; padding-right: 20px;  padding-left: 20px;  padding-top: 13px; padding-bottom: 15px;  background-color: #4285f4;  color: #fff; text-decoration: none;    font-family: tahoma; -moz-border-radius: 4px;
+           -webkit-border-radius: 4px; border-radius: 4px;">google calendar</a>  just in accept the request of reservation*@
+
+
+
+
+    <p style="color: #797979;margin-top: 30px;font-size:12px;font-family:tahoma;">
+        <span style="font-weight:bold; color: #489e69;font-family:tahoma;">سياسة الاستخدام: </span>
+    </p>
+    <p>عند الحجز عن طريق منصة ريّح للمنتجعات والشهاليات فاني اوافق على:</p>
+    <p>
+        1. الهدف من منصة ريّح هو ربط المتسأجرين مع ملاك المنتجعات والشاليهات والاستراحات.
+    </p>
+    <p>
+        2. الية الحجز الحالية هو ارسال الطلب لادارة المنتج ، أو الشاليه أو الاستراحة وانتظار قبول الطلب او رفضه.
+    </p>
+    <p>
+        3. عملية الدفع والتأمين وغير ذلك من الحقوق المالية ليست من ضمن الخدمة المقدمة ، بل يتم الاتفاق عليها بين المستأجر وادارة العقار.
+    </p>
+    <p>
+        4. عملية الحجز حالياً متاحة للاستراحة التي تم توثيقها والتواصل مع ملاكها وتعريفهم بالخدمة.
+    </p>
+    <p>
+        5. لا نتحمل في منصة ريّح أي سوء استخدام للخدمة من أي طرف من الاطراف.
+    </p>
+    <p>
+        6. لا نتحمل في منصة ريّح أي خطأ في المعلومات المدرجة في التطبيق مثل الاسعار او المرافق او غيرها حيث يتم توفيرها من المالك بشكل مباشر.
+    </p>
