@@ -4,9 +4,9 @@
         <div class="m-stack m-stack--flex-tablet-and-mobile m-stack--ver m-stack--desktop">
             <div class="m-stack__item m-stack__item--left m-stack__item--middle m-stack__item--last">
                 <span class="m-footer__copyright">
-                    @DateTime.Now.Year &copy; Mhana by <a  class="m-link">ModernIT</a>
+                    @DateTime.Now.Year &copy; Mhana by <a class="m-link">ModernIT</a>
                 </span>
-            </div>            
+            </div>
         </div>
     </div>
 </footer>
@@ -502,12 +502,102 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-                <a  class="btn btn-primary btn-remove">حفظ</a>
+                <a class="btn btn-primary btn-remove">حفظ</a>
             </div>
         </div>
     </div>
 </div>
 <div class="modal fade" id="confirm-active" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">تأكيد عملية  التفعيل</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="m-alert m-alert--icon alert alert-warning" role="alert">
+                    <div class="m-alert__icon">
+                        <i class="la la-warning"></i>
+                    </div>
+                    <div class="m-alert__text">
+                        <strong>هل ترغب في  تفعيل هذا العنصر ؟ في حالة التأكيد سيكون العنصر متاح للاستخدام </strong>
+                    </div>
+                    <div class="m-alert__close">
+                        <button type="button" class="close" data-close="alert" aria-label="Hide"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+                <a class="btn btn-primary btn-ok">حفظ</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="confirm-multi-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">تأكيد عملية إلغاء التفعيل</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="m-alert m-alert--icon alert alert-warning" role="alert">
+                    <div class="m-alert__icon">
+                        <i class="la la-warning"></i>
+                    </div>
+                    <div class="m-alert__text">
+                        <strong>هل ترغب في  إالغاء تفعيل هذا العنصر ؟ في حالة التأكيد سيكون العنصر غير متاح للاستخدام </strong>
+                    </div>
+                    <div class="m-alert__close">
+                        <button type="button" class="close" data-close="alert" aria-label="Hide"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+                <a class="btn btn-primary btn-remove">حفظ</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-multi-delete_req" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">تأكيد عملية  الحذف</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="m-alert m-alert--icon alert alert-danger" role="alert">
+                    <div class="m-alert__icon">
+                        <i class="la la-danger"></i>
+                    </div>
+                    <div class="m-alert__text">
+                        <strong>هل ترغب في الغاء  هذا العنصر ؟  </strong>
+                    </div>
+                    <div class="m-alert__close">
+                        <button type="button" class="close" data-close="alert" aria-label="Hide"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+                <a class="btn btn-primary btn-remove">حفظ</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirm-multi-active" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -570,6 +660,57 @@
             $("#userID").val($(this).data('id'));
             modal.find('.btn-remove').attr('href', $(this).data('href'));
 
+        });
+
+
+
+
+        $(".DeleteMultiBox").click(function () {
+            var modal = $('#confirm-multi-delete');
+            debugger;
+            var sList = "";
+            $('.MyTableCheckButton:checked').each(function () {
+                debugger;
+                if (sList != "") {
+                    sList = sList + ",";
+                }
+                sList = sList + $(this).attr("id");
+            });
+            var href = "/Admin/Teachers/DeactiveTeachers?Ids=" + sList;
+            modal.find('.btn-remove').attr('href', href);
+
+
+
+        });
+        $(".ActiveMultiBox").click(function () {
+            var modal = $('#confirm-multi-active');
+            debugger;
+            var sList = "";
+            $('.MyTableCheckButton:checked').each(function () {
+                debugger;
+                if (sList != "") {
+                    sList = sList + ",";
+                }
+                sList = sList + $(this).attr("id");
+            });
+            var href = "/Admin/Teachers/ActiveTeachers?Ids=" + sList;
+            modal.find('.btn-ok').attr('href', href);
+        });
+        $(".DeleteMultiBoxd").click(function () {
+            debugger;
+
+            var modal = $('#confirm-multi-delete_req');
+            debugger;
+            var sList = "";
+            $('.MyTableCheckButton:checked').each(function () {
+                debugger;
+                if (sList != "") {
+                    sList = sList + ",";
+                }
+                sList = sList + $(this).attr("id");
+            });
+            var href = "/Admin/Teachers/DeleteTeachers?Ids=" + sList;
+            modal.find('.btn-remove').attr('href', href);
         });
     });
 

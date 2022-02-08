@@ -1,0 +1,76 @@
+﻿@model IEnumerable<NileThink.Framework.PrivateLessonManagementSystem.DAL.Models.sp_get_teacher_requests_Result>
+
+
+@{ if (Model != null)
+    {
+        <table class="table table-striped- table-bordered table-hover table-checkable" id="m_table_1">
+            <thead>
+                <tr>
+                    <th>مرسل الطلب</th>
+                    <th>المبلغ</th>
+                    <th>تاريخ الطلب</th>
+                    <th>البنك</th>
+                    <th>أيبان </th>
+                    <th>إسم صاحب  الحساب</th>
+                    <th>حالة الطلب</th>
+                    <th>عمليات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.teacher_name</td>
+                        <td>@item.amount</td>
+                        <td>@String.Format("{0:MM/dd/yyyy}", item.created_date)</td>
+
+                        <td>@item.bank_name</td>
+                        <td>@item.iban</td>
+                        <td>@item.user_accoun_name </td>
+                        <td>
+                            @{
+                                if (item.status_id == 1)
+                                {
+                                    <span class="m-badge  m-badge--warning m-badge--wide">بانتظار الرد</span>
+                                }
+                                if (item.status_id == 2)
+                                {
+                                    <span class="m-badge  m-badge--success m-badge--wide">مقبول</span>
+                                }
+                                if (item.status_id == 3)
+                                {
+                                    <span class="m-badge  m-badge--danger m-badge--wide">مرفوض</span>
+                                }
+
+                            }
+                        </td>
+                        <td nowrap>
+                            <span style="overflow: visible; position: relative; width: 110px;">
+
+                                @{
+
+
+                                    if (item.status_id == 1)
+                                    {
+                                        <a data-toggle="modal" data-target="#confirm-approve_req" data-href="@Url.Action("ChangeTeacherReqStatus", new { ReqId=item.teacher_request__id,Status=2})" class="btn btn-success m-btn m-btn--icon m-btn--icon-only ApproveReqRef" data-placement="top" title="موافق"><i class="la la-check-circle"></i></a>
+
+                                        <a data-toggle="modal" data-target="#confirm-delete_req" data-href="@Url.Action("ChangeTeacherReqStatus", new { ReqId=item.teacher_request__id,Status=3})" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only RejectReqRef" title="رفض"><i class="la la-trash"></i></a>
+
+                                    }
+                                }
+                            </span>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-warning" role="alert">
+            <strong>نأسف!</strong> لم يصل طلبات بعد  .
+        </div>
+    }
+}

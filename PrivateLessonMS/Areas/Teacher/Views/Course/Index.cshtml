@@ -53,7 +53,7 @@
                                                 <a href="@Url.Action("Edit", new { id = item.id })" class="btn btn-primary m-btn m-btn--icon m-btn--icon-only"  data-toggle="tooltip" data-placement="top" title="استعراض البيانات">
                                                     <i class="la la-edit"></i>
                                                 </a>
-                                                @{
+                                                @*@{
 
                                                     if (item.status == 1)
                                                     {
@@ -65,7 +65,7 @@
                                                         <a data-toggle="modal" data-target="#confirm-active" data-href="@Url.Action("Active", new { id=item.id})" class="btn btn-success m-btn m-btn--icon m-btn--icon-only ActiveBox"  data-toggle="tooltip" data-placement="top" title="تفعيل الدرس"><i class="la la-check-circle"></i></a>
                                                     }
 
-                                                }
+                                                }*@
                                             </span>
 
                                         </td>

@@ -1,0 +1,136 @@
+﻿@model IEnumerable<NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.TeacherListAdmin>
+<table class="table table-striped- table-bordered table-hover table-checkable" id="m_table_1">
+    <thead>
+        <tr>
+            <th>
+                <input type="checkbox" style="border: none; background: transparent; font-size: 14px;" id="MyTableCheckAllButton" />               
+            </th>
+            <th>اسم المعلم</th>
+            <th>رقم الجوال</th>
+            <th>البريد الالكتروني</th>
+            @*<th>تاريخ التسجيل</th>*@
+            <th>حالة أبشر</th>
+            <th>حالة الطلب</th>
+            <th>عمليات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td> <input type="checkbox" style="border: none; background: transparent; font-size: 14px;" class="MyTableCheckButton" id="@item.teacherId" />   </td>
+                    <td>@item.fullname</td>
+                    <td>@item.mobile</td>
+                    <td>@item.email</td>
+                    @*<td>@String.Format("{0:MM/dd/yyyy}", item.cdate)</td>*@
+                    <td class="text-center">
+                        @{
+                            if (item.absher == 1)
+                            {
+                                @:<i class="la la-certificate" style="color:blue;font-size:28px;"></i>
+                            }
+                            else
+                            {
+                                @:<i class="flaticon-circle" style="color:red;"></i>
+                            }
+                        }
+                    </td>
+                    <td class="text-center">
+                        @{
+                            @*if (item.status == 0)
+                                {
+                                    <span class="m-badge  m-badge--warning m-badge--wide">بانتظار الموافقة</span>
+                                }
+                                if (item.status == 1)
+                                {
+                                    <span class="m-badge  m-badge--success m-badge--wide">مقبول</span>
+                                }
+                                if (item.status == -1)
+                                {
+                                    <span class="m-badge  m-badge--danger m-badge--wide">مرفوض</span>
+                                }*@
+
+
+                            if (!item.isActive.HasValue)
+                            {
+                                <span class="m-badge  m-badge--warning m-badge--wide">بانتظار الموافقة</span>
+                            }
+                            if (item.isActive == true)
+                            {
+                                <span class="m-badge  m-badge--success m-badge--wide">مفعل</span>
+                            }
+                            if (item.isActive == false)
+                            {
+                                <span class="m-badge  m-badge--danger m-badge--wide">موقوف</span>
+                            }
+                        }
+                    </td>
+                    <td nowrap>
+                        <span style="overflow: visible; position: relative; width: 110px;">
+                            @*<div class="m-dropdown__body">*@
+                                @*<div class="m-dropdown__content">
+                                    <ul class="m-nav m-nav--skin-light">*@
+
+                                @*<li class="m-nav__item">*@
+                                <a href="@Url.Action("Edit", new { id = item.id })" @*class="btn btn-primary m-btn m-btn--icon m-btn--icon-only"*@ class="m-nav__link">
+                                    @*<i class="la la-edit"></i>*@
+                                    <button class="btn btn-primary ">تعديل </button>
+                                </a>
+                                @*</li>*@
+                                @*<li class="m-nav__item">*@
+                                <a href="@Url.Action("EditTeacherPackage", new { id = item.teacherId })" title="تعديل الباقات" class="m-nav__link">
+                                    <button class="btn btn-primary ">تعديل الباقات </button>
+                                </a>
+                                @*</li>*@
+                                @*<li class="m-nav__item">*@
+                                <a href="@Url.Action("AssignTeacherPackage", new { id = item.teacherId })" title="تعيين باقة للمعلم" class="m-nav__link">
+                                    <button class="btn btn-primary ">تعيين باقة للمعلم </button>
+                                </a>
+                                @*</li>*@
+                                @{
+
+                                    if (item.isActive == true)
+                                    {
+
+                                        @*<li class="m-nav__item">*@
+                                        <a data-toggle="modal" data-target="#confirm-delete" data-href="@Url.Action("DeactiveTeacher", new { id = item.id })" class="m-nav__link DeleteBox"
+                                           title="إلغاء التفعيل">
+                                            @*<i class="la la-remove"></i>*@
+                                            <button class="btn btn-danger ">إلغاء التفعيل </button>
+                                        </a>
+                                        @*</li>*@
+                                    }
+
+                                    else
+                                    {
+                                        @*<li class="m-nav__item">*@
+                                        <a data-toggle="modal" data-target="#confirm-active" data-href="@Url.Action("ActiveTeacher", new { id = item.id })" class="m-nav__link ActiveBox" title="تفعيل">
+                                            @*<i class="la la-check-circle"></i>*@
+                                            <button class="btn btn-success ">تفعيل </button>
+                                        </a>
+                                        @*</li>*@
+                                    }
+
+                                }
+                                @*<li class="m-nav__item">*@
+                                <a data-toggle="modal" data-target="#confirm-delete_req" data-href="@Url.Action("Delete", new { id=item.id})" class="m-nav__link DeleteBoxd" title="حذف">
+                                    @*<i class="la la-trash"></i>*@
+                                    <button class="btn btn-danger ">حذف </button>
+                                </a>
+                                @*</li>*@
+                                @*</ul>
+                                        </div>
+                                    </div>*@
+                        </span>
+
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+

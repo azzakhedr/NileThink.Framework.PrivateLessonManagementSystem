@@ -42,7 +42,7 @@
                                         <select class="form-control m-input" name="specialization_id">
                                             @foreach(NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.SpecializationVM item in ViewBag.list)
                                             {
-                                                <option value="@item.id" required @(ViewBag.item !=null && ViewBag.item.specializationid== item.id?"selected":"" )>@item.name</option>
+                                                <option value="@item.id" required @(ViewBag.item !=null && ViewBag.item.specializationId== item.id?"selected":"" )>@item.name</option>
                                             }
 
                                         </select>
@@ -83,7 +83,7 @@
                                     <a href="@Url.Action("branch", new { id = item.id })" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Edit details">
                                         <i class="la la-edit"></i>
                                     </a>
-                                    @*<a data-toggle="modal" data-target="#confirm-delete" data-href="@Url.Action("Deactive", new { id=item.Id})" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill DeleteBox" title="Delete"><i class="la la-trash"></i></a>*@
+                                    <a data-toggle="modal" data-target="#confirm-delete" data-href="@Url.Action("RemoveBranch", new { id=item.id})" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill DeleteBox" title="Delete"><i class="la la-trash"></i></a>
                                 </span>
                             </td>
                         </tr>

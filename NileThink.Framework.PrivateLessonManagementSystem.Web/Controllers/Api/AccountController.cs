@@ -27,25 +27,30 @@ using System.Configuration;
 using NileThink.Framework.PrivateLessonManagementSystem.Web;
 using NileThink.Framework.PrivateLessonManagementSystem.BLL.BussinessLayer;
 using NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels;
+using PrivateLessonMS.Resources;
+using ChangeUserModel = NileThink.Framework.PrivateLessonManagementSystem.Web.Models.ChangeUserModel;
 
 namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
 {
 
     [Authorize]
     [RoutePrefix("api/v1/Account")]
-    public class AccountController : ApiController
+    public class AccountController : BaseController
     {
         UsersBLL _UsersBll = new UsersBLL();
         StudentBLL _StudentBll = new StudentBLL();
         TeacherBLL _TeacherBll = new TeacherBLL();
         private const string LocalLoginProvider = "Local";
         string URL = ConfigurationManager.AppSettings["URL"];
-        private ApplicationUserManager _userManager;
 
+        NotificationBLL _notificationBLL = new NotificationBLL();
+        string WebUrl = ConfigurationManager.AppSettings["WebLink"];
+        private ApplicationUserManager _userManager;
+        CommonController _comm = new CommonController();
         public AccountController()
         {
 
-           
+
 
 
         }
@@ -71,7 +76,61 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
-     
+        [Authorize]
+        [HttpPost]
+        [Route("AddToken")]
+        public async Task<IHttpActionResult> AddToken(NotificationTokenVM data)
+        {
+            string Lang = lang;
+            try
+            {
+                string user_id = User.Identity.GetUserId();
+                if (data.user_type == 1)
+                {
+                    data.user_id = _StudentBll.Student_GetByUserId(user_id).studentId;
+                }
+                else if (data.user_type == 2)
+                {
+                    data.user_id = _TeacherBll.Teacher_GetByUserId(user_id).teacherId;
+                }
+                _notificationBLL.insertUserToken(data);
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.SavedSuccessfully, true, null));
+            }
+            catch (Exception ex)
+            {
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, ex.ToString(), false, null));
+            }
+
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("RemoveToken")]
+        public async Task<IHttpActionResult> RemoveToken(NotificationTokenVM data)
+        {
+            try
+            {
+                string Lang = lang;
+                string user_id = User.Identity.GetUserId();
+                if (data.user_type == 1)
+                {
+                    data.user_id = _StudentBll.Student_GetByUserId(user_id).studentId;
+                }
+                else if (data.user_type == 2)
+                {
+                    data.user_id = _TeacherBll.Teacher_GetByUserId(user_id).teacherId;
+                }
+                _notificationBLL.RemoveUserToken(data);
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.SavedSuccessfully, true, null));
+            }
+            catch (Exception ex)
+            {
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, ex.ToString(), false, null));
+            }
+
+        }
+
+
+
         /// <summary>
         /// تسحيل الخروج   .
         /// </summary>
@@ -88,22 +147,23 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
         [Route("ChangePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
+            string Lang = lang;
             if (!ModelState.IsValid)
             {
-                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "هنالك خطأ في كلمة المرور يرجى التأكد منها", false, null));
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.PasswordError, false, null));
             }
-           
+
             IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.oldPassword, model.newPassword);
 
 
 
             if (!result.Succeeded)
             {
-               
-                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "هنالك خطأ في كلمة المرور يرجى التأكد منها", false, null));
+
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.PasswordError, false, null));
             }
 
-            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "تم تغيير كلمة المرور بنجاح", true, null));
+            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.PasswordChangeSuccessfully, true, null));
         }
         /// <summary>
         /// نسيت كلمة المرور   .
@@ -115,28 +175,39 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
         {
             try
             {
+                string Lang = lang;
                 if (ModelState.IsValid)
                 {
                     var user = await UserManager.FindByEmailAsync(model.email);
 
                     if (user == null)
                     {
-                        return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "هذا المستخدم غير مسجل لدينا", false, null));
+                        return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.NotRegisterUser, false, null));
                     }
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                    var callbackUrl = Url.Link("Default", new { Controller = "Home", Action = "ResetPassword", id = user.Id, code = code });
+                    var callbackUrl = WebUrl + "/Home/ResetPassword?userid=" + user.Id + "&&code=" + code;
+                    var name = string.IsNullOrEmpty(user.fullname) ? user.first_name + " " + user.last_name : user.fullname;
                     ChangeUserModel mail = new ChangeUserModel()
                     {
-                        name = string.IsNullOrEmpty(user.fullname) ? user.first_name + " " + user.last_name : user.fullname,
+                        name = name,
                         url = callbackUrl,
                         to = model.email
                     };
-                   // new Mhana.Controllers.MailerController().foregetPassword(mail).Deliver();
-                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "تم ارسال رسالة الى بريدك الالكتروني يرجى مراجعة الرسالة", true, null));
+
+                    #region ---- send Mail -----------
+                    var body = " عزيزي المستخدم:" + name + ", <br/> تم طلب عدم تذكر كلمة المرور برجاء الدخول علي اللينك التالي لاكمال الطلب <br/> " + callbackUrl;
+                    List<string> emails = new List<string>();
+                    emails.Add(model.email);
+                    new MailerController().SendMail(emails, "تغيير كلمة المرور", body);
+                    //SendMail(entity.EmployeeEmail, "New Teame User", body);
+                    #endregion
+
+                    // new MailerController().foregetPassword(mail).Deliver();
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.SendEmail, true, null));
                 }
-                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "هنالك خطأ يرجى التأكد من البيانات ", false, null));
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, null));
             }
             catch (Exception ex)
             {
@@ -154,22 +225,23 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
         {
             try
             {
+                string Lang = lang;
                 if (string.IsNullOrEmpty(model.email) || string.IsNullOrEmpty(model.password))
-                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "يرجى ادخال بيانات صحيحة", false, null));
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.IncorrectData, false, null));
                 if (string.IsNullOrEmpty(model.password) || model.password.Length < 6)
-                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "كلمة المرور 6 حروف على الأقل", false, null));
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.PasswordFormat, false, null));
 
                 var check_username = await UserManager.FindByNameAsync(model.email);
                 if (check_username != null)
-                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "اسم المستخدم موجود مسبقاً يرجى ادخال اسم مستخدم جديد", false, null));
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.UserUsedBefore, false, null));
                 //var check_email = await UserManager.FindByEmailAsync(model.email);
                 //if (check_email != null)
                 var check_email = _UsersBll.CheckUserEmail(model.email, "Student");
                 if (check_email == true)
-                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "البريد الالكتروني المستخدم موجود مسبقاً", false, null));
-                var check_mobile = _UsersBll.CheckUserMobile(model.mobile, "Student",null);
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.EmailUsedBefore, false, null));
+                var check_mobile = _UsersBll.CheckUserMobile(model.mobile, "Student", null);
                 if (check_mobile == true)
-                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "رقم الهاتف المستخدم موجود مسبقاً", false, null));
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.PhoneUsedBefore, false, null));
                 var user = new ApplicationUser()
                 {
                     UserName = model.email,
@@ -184,13 +256,14 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                     fullname = model.fullName,
                     photo = "defaultm.jpg",
                     last_name = model.lastName,
-                    first_name = model.firstName
+                    first_name = model.firstName,
+                    country = model.country
 
                 };
                 IdentityResult result = await UserManager.CreateAsync(user, model.password);
 
                 if (!result.Succeeded)
-                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "حدث خطأ في ادخال البيانات", false, result.Succeeded));
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, result.Succeeded));
 
                 await UserManager.AddToRoleAsync(user.Id, "Student");
                 // var UserId=   _UsersBll.AddUser(user.Id, user.Email, user.PhoneNumber, user.PasswordHash, 1);
@@ -203,7 +276,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                     firstName = model.firstName,
                     lastName = model.lastName,
                     genderID = false
-                    
+
 
                 };
 
@@ -221,14 +294,23 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                 msg = "شكرأ لتسجيلك معنا في تطبيق درس خصوصي الآن يمكنك الاستفادة من التطبيق وتعزيز قدراتك العلمية من خلال مشاركتنا والاستفادة من خدماتنا ";
                 //else
                 //    msg = "شكرأ لتسجيلك معنا في تطبيق درس خصوصي  يرجى الدخول الى التطبيق لاكمال ملفك الشخصي حتى تتمكن الادارة من مراجعة ملفك الشخصي وتفعيل حسابك كمعلم  ";
-                //RegEmail mail = new RegEmail()
-                //{
-                //    firstname = model.email,
-                //    cdate = string.Format("{0:MM/dd/yyyy}", DateTime.Now),
-                //    message = msg,
-                //    type = "طالب",
-                //    to = model.email
-                //};
+                RegEmail mail = new RegEmail()
+                {
+                    firstname = model.email,
+                    cdate = string.Format("{0:MM/dd/yyyy}", DateTime.Now),
+                    message = msg,
+                    type = "طالب",
+                    to = model.email
+                };
+                var body = " عزيزي الطالب:" + model.email + ", <br/> " + msg + "<br/> ";
+                List<string> emails = new List<string>();
+                emails.Add(model.email);
+                new MailerController().SendMail(emails, "تسجيل طالب جديد ", body);
+
+                var msg2 = "هناك طلب تسجيل جديد لطالب:";
+                var body2 = " عزيزي مدير النظام:" + ", <br/> " + msg2 + "<br/> " + model.email;
+                List<string> emails2 = _UsersBll.GetAdminEmails("3");
+                new MailerController().SendMail(emails2, "تسجيل طالب جديد ", body2);
                 //new Controllers.MailerController().RegEmail(mail).Deliver();
                 if (StudentId.HasValue)
                 {
@@ -269,23 +351,25 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
         {
             try
             {
+                string Lang = lang;
                 if (string.IsNullOrEmpty(model.email) || string.IsNullOrEmpty(model.password))
-                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "يرجى ادخال بيانات صحيحة", false, null));
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.IncorrectData, false, null));
                 if (string.IsNullOrEmpty(model.password) || model.password.Length < 6)
-                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "كلمة المرور 6 حروف على الأقل", false, null));
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.PasswordFormat, false, null));
 
                 var check_username = await UserManager.FindByNameAsync(model.email);
                 if (check_username != null)
-                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "اسم المستخدم موجود مسبقاً يرجى ادخال اسم مستخدم جديد", false, null));
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.UserUsedBefore, false, null));
                 //var check_email = await UserManager.FindByEmailAsync(model.email);
                 //if (check_email != null)
                 //    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "البريد الالكتروني المستخدم موجود مسبقاً", false, null));
+
                 var check_email = _UsersBll.CheckUserEmail(model.email);
                 if (check_email == true)
-                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "البريد الالكتروني المستخدم موجود مسبقاً", false, null));
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.EmailUsedBefore, false, null));
                 var check_mobile = _UsersBll.CheckUserMobile(model.mobile, "Teacher");
                 if (check_mobile == true)
-                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "رقم الهاتف المستخدم موجود مسبقاً", false, null));
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.PhoneUsedBefore, false, null));
                 var user = new ApplicationUser()
                 {
                     UserName = model.email,
@@ -301,13 +385,14 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                     first_name = model.firstName,
                     last_name = model.lastName,
                     photo = "defaultm.jpg",
+                    country = model.country
 
 
                 };
                 IdentityResult result = await UserManager.CreateAsync(user, model.password);
 
                 if (!result.Succeeded)
-                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "حدث خطأ في ادخال البيانات", false, result.Succeeded));
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, result.Succeeded));
 
                 await UserManager.AddToRoleAsync(user.Id, "Teacher");
                 // var UserId = _UsersBll.AddUser(user.Id, user.Email, user.PhoneNumber, user.PasswordHash, 2);
@@ -318,7 +403,9 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                     email = user.Email,
                     mobile = user.PhoneNumber,
                     firstName = model.firstName,
-                    lastName = model.lastName
+                    lastName = model.lastName,
+                    fullName = model.fullName,
+
 
                 };
 
@@ -336,25 +423,42 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                 // msg = "شكرأ لتسجيلك معنا في تطبيق درس خصوصي الآن يمكنك الاستفادة من التطبيق وتعزيز قدراتك العلمية من خلال مشاركتنا والاستفادة من خدماتنا ";
                 //else
                 msg = "شكرأ لتسجيلك معنا في تطبيق درس خصوصي  يرجى الدخول الى التطبيق لاكمال ملفك الشخصي حتى تتمكن الادارة من مراجعة ملفك الشخصي وتفعيل حسابك كمعلم  ";
-                //RegEmail mail = new RegEmail()
-                //{
-                //    firstname = model.email,
-                //    cdate = string.Format("{0:MM/dd/yyyy}", DateTime.Now),
-                //    message = msg,
-                //    type = "معلم",
-                //    to = model.email
-                //};
-                //new Controllers.MailerController().RegEmail(mail).Deliver();
+                RegEmail mail = new RegEmail()
+                {
+                    firstname = model.email,
+                    cdate = string.Format("{0:MM/dd/yyyy}", DateTime.Now),
+                    message = msg,
+                    type = "معلم",
+                    to = model.email
+                };
+                var body = " عزيزي المعلم:" + model.email + ", <br/> " + msg + "<br/> ";
+                List<string> emails = new List<string>();
+                emails.Add(model.email);
+                new MailerController().SendMail(emails, "تسجيل معلم جديد ", body);
+
+                var msg2 = "هناك طلب تسجيل جديد لمعلم:";
+                var body2 = " عزيزي مدير النظام:" + ", <br/> " + msg2 + "<br/> " + model.email;
+                List<string> emails2 = _UsersBll.GetAdminEmails("3");
+                new MailerController().SendMail(emails2, "تسجيل معلم جديد ", body2);
+                // new Controllers.MailerController().RegEmail(mail).Deliver();
+
+                string requireUpdateProfileAbsher = "";
+                if (user.absher != 1 && user.country == "1")
+                {
+                    requireUpdateProfileAbsher = "2";
+                }
+                var Teacher = _TeacherBll.Teacher_GetByUserId(user.Id);
                 if (TeacherId.HasValue)
                 {
-                    var tokenUser = await GetToken(user);
+                    var tokenUser = requireUpdateProfileAbsher == "2" || (user.status == -2 || user.status == -1) || (Teacher.isActive != true) ? null : await GetToken(user);
                     return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, null, true,
                                 new RegisterResponseModel()
                                 {
                                     expired = 14,
                                     fullName = user.fullname,
-                                   token = tokenUser,
-                                email = user.Email,
+                                    token = tokenUser,
+                                    userId = user.Id,
+                                    email = user.Email,
                                     allowNotify = user.allow_notify,
                                     id = TeacherId.HasValue ? TeacherId.Value : 0,
                                     mobile = user.PhoneNumber,
@@ -363,15 +467,19 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                                     lastName = model.lastName,
                                     isComplete = false,
                                     absherNo = user.absher.HasValue ? user.absher : 0,
+                                    absher_id = user.absher_no,
                                     online = true,
-                                    photo = URL + "/resources/users/" + user.photo
-                                }));
+                                    photo = URL + "/resources/users/" + user.photo,
+                                    country = !String.IsNullOrEmpty(user.country) ? user.country : "0",
+                                    requireUpdateProfileAbsher = requireUpdateProfileAbsher,
+                                    AbsherUserId = user.Id,
+                                })); ;
                 }
-                return this.ResponseBadRequest(new ResponseViewModel(HttpStatusCode.OK, "حدث خطأ   من فضلك ادخل بيانات صحيحة", false, null));
+                return this.ResponseBadRequest(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, null));
             }
             catch (Exception ex)
             {
-                return this.ResponseBadRequest(new ResponseViewModel(HttpStatusCode.OK, "حدث خطأ   من فضلك ادخل بيانات صحيحة", false, null));
+                return this.ResponseBadRequest(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, null));
 
             }
         }
@@ -385,6 +493,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
         [ResponseType(typeof(string))]
         public IHttpActionResult ConfirmCode(string code, string mobile = null)
         {
+            string Lang = lang;
             string id = User.Identity.GetUserId();
             var _user = UserManager.FindById(id);
             var res = UserManager.VerifyChangePhoneNumberToken(id, code, string.IsNullOrEmpty(mobile) ? _user.PhoneNumber : mobile);
@@ -394,9 +503,9 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                 _user.PhoneNumberConfirmed = true;
                 _user.PhoneNumber = string.IsNullOrEmpty(mobile) ? _user.PhoneNumber : mobile;
                 UserManager.Update(_user);
-                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "تم تأكيد  رقم الجوال", true, null));
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.PhoneConfirmed, true, null));
             }
-            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "كود التفعيل المستخدم خاطئ", false, null));
+            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.IncorrectActivatedCode, false, null));
         }
         /// <summary>
         /// ارسال كود التفعيل       
@@ -406,6 +515,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
         [ResponseType(typeof(string))]
         public IHttpActionResult SendCode(string mobile = null)
         {
+            string Lang = lang;
             string id = User.Identity.GetUserId();
             var _user = UserManager.FindById(id);
             var phoneToken = UserManager.GenerateChangePhoneNumberToken(_user.Id, string.IsNullOrEmpty(mobile) ? _user.PhoneNumber : mobile);
@@ -415,10 +525,10 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
             string RECIEVER = "966" + myMobile.Substring(1);
             _sms.sendmessage(RECIEVER, MESSAGE);
             // "يرجى ادخال كود التفعيل المرسل على جوالك "
-            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "يرجى ادخال كود التفعيل المرسل على جوالك ", true, null));
+            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.EnterActivatedCode, true, null));
 
         }
-      
+
         ///// <summary>
         /////   عرض الاشعارات.
         ///// </summary>
@@ -480,7 +590,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
         }
         private async Task<string> GetToken(ApplicationUser user)
         {
-            
+
             ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
                    OAuthDefaults.AuthenticationType);
 
@@ -940,5 +1050,80 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
         }
 
         #endregion
+
+        [AllowAnonymous]
+        [Route("testNotification")]
+        [ResponseCodes(HttpStatusCode.OK)]
+        [HttpGet]
+        public IHttpActionResult testNotification(string Token)
+        {
+            string Lang = lang;
+            var outData = _comm.SendNotification("", Token, 3, "test notif");
+            // "يرجى ادخال كود التفعيل المرسل على جوالك "
+            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, outData, true, null));
+
+        }
+
+        [Authorize]
+        [Route("RequireUpdateProfileAbsher")]
+        [ResponseCodes(HttpStatusCode.OK)]
+        [HttpGet]
+        public IHttpActionResult RequireUpdateProfileAbsher()
+        {
+            string Lang = lang;
+            var requireUpdateProfileAbsher = "0";
+            var msg = "";
+
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            if (User.IsInRole("Teacher"))
+            {
+                if (user.absher != 1 && String.IsNullOrEmpty(user.country))
+                {
+                    requireUpdateProfileAbsher = "1";
+                    msg = Resource.NeedUpdateProfile;
+                }
+                else if (user.absher != 1 && user.country == "1")
+                {
+                    requireUpdateProfileAbsher = "2";
+                    msg = Resource.NeedAbsher;
+                }
+            }
+
+            dynamic obj = new { absher_no = user.absher_no, requireUpdateProfileAbsher = requireUpdateProfileAbsher };
+            // "يرجى ادخال كود التفعيل المرسل على جوالك "
+            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, msg, true, obj));
+
+        }
+
+        [AllowAnonymous]
+        [Route("GetRequiredAbsher")]
+        [ResponseCodes(HttpStatusCode.OK)]
+        [HttpGet]
+        public IHttpActionResult GetRequiredAbsher(string UserId)
+        {
+            string Lang = lang;
+            var requireUpdateProfileAbsher = "0";
+            var msg = "";
+
+            var user = UserManager.FindById(UserId);
+            if (User.IsInRole("Teacher"))
+            {
+                if (user.absher != 1 && String.IsNullOrEmpty(user.country))
+                {
+                    requireUpdateProfileAbsher = "1";
+                    msg = Resource.NeedUpdateProfile;
+                }
+                else if (user.absher != 1 && user.country == "1")
+                {
+                    requireUpdateProfileAbsher = "2";
+                    msg = Resource.NeedAbsher;
+                }
+            }
+
+            dynamic obj = new { absher_no = user.absher_no, requireUpdateProfileAbsher = requireUpdateProfileAbsher };
+
+            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, msg, true, obj));
+
+        }
     }
 }

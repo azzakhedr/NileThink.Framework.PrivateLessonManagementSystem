@@ -1,0 +1,133 @@
+﻿@model List<NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.PackagesVM>
+@using NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels
+@{
+    ViewBag.Title = "EditTeacherPackage";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin2.cshtml";
+    List<NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.TeacherVM> teachLst = (List<NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.TeacherVM>)ViewBag.TeacherLst;
+
+    List<string> teacherIds = ViewBag.teacherIds != null ? (ViewBag.teacherIds)  : new List<string>();
+}
+
+<div class="row">
+    <div id="status_message" class="col-lg-12">@Html.Action(actionName: "TempMessage", controllerName: "Shared", routeValues: new { area = "" })</div>
+    <div class="col-lg-12">
+
+        <!--begin::Portlet-->
+        <div class="m-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <span class="m-portlet__head-icon m--hide">
+                            <i class="la la-gear"></i>
+                        </span>
+                        <h3 class="m-portlet__head-text">
+                            تعديل رسوم الباقات
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <!--begin::Form-->
+            <form class="m-form m-form--fit" id="EditTeacherPackage" action="@Url.Action("EditTeacherPackage")" method="post" enctype="multipart/form-data">
+                <div class="m-portlet__body">
+                    <div class="m-form__section m-form__section--first">
+
+                        <div class="m-form__heading">
+                            <h3 class="m-form__heading-title">1. رسوم الباقات : </h3>
+                        </div>
+
+
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-6">
+                                <label>المعلميين </label>
+                                <div class="m-input-icon m-input-icon--left">
+                                    <select class="form-control m-input" id="teacherDDL" multiple required>
+                                        <option value="">-- اختر معلم أو أكثر --</option>
+                                        @foreach (var item in teachLst)
+                                        {
+                                            <option value="@item.id" @((item.id == ViewBag.teacherId || teacherIds.Contains(item.id.ToString())) ? "selected" : "" )>@item.fullName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="m-form__seperator m-form__seperator--dashed"></div>
+                        <div class="m-form__section m-form__section--last">
+                            <div class="m-form__heading">
+                                <h3 class="m-form__heading-title">2. رسوم الباقات :</h3>
+                            </div>
+                            @foreach (var item in Model)
+                            {
+                                <div class="m-form__group form-group row">
+                                    <div class="col-lg-2">
+                                        <label for="course_day" style="display:block">&nbsp; </label>
+                                        <label class="m-checkbox">
+                                            <input type="checkbox" name="teacher_times[0].dayOfWeek" checked disabled value="@item.PackId"> @item.name_ar
+
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">الرسوم الافتراضية  </label>
+
+                                        <input type="text" class="form-control m-input   " disabled readonly value="@item.defaultFees">
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">الرسوم المعدلة  </label>
+
+                                        <input type="text" class="form-control m-input packFees " required id="@item.PackId" value="@item.fees">
+
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="TeacherIds" id="TeacherIds" />
+                <input type="hidden" name="PackageIds" id="PackageIds" />
+                <div class="m-portlet__foot m-portlet__no-border m-portlet__foot--fit">
+                    <div class="m-form__actions m-form__actions--solid">
+                        <button type="submit" class="btn btn-success">حفظ المتغيرات</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        debugger;
+        var feesStr = "";
+        $(document).ready(function (e) {
+            getPacData();
+            $('#TeacherIds').val($('#teacherDDL').val().join(','));
+        });
+
+        $('#teacherDDL').change(function (e) {
+            $('#TeacherIds').val($('#teacherDDL').val().join(','));
+        });
+        $('.packFees').change(function (e) {
+            getPacData();
+        });
+        function getPacData() {
+            debugger;
+            feesStr = "";
+            $('.packFees').each(function (i, obj) {
+                debugger;
+                if (feesStr != "") {
+                    feesStr = feesStr + ",";
+                }
+                feesStr = feesStr + $(this).attr('id') + "#" + $(this).val();
+
+            });
+            $('#PackageIds').val(feesStr);
+
+        }
+    </script>
+}

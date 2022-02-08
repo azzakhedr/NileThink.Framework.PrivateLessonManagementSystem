@@ -68,7 +68,11 @@
                                     <span style="overflow: visible; position: relative; width: 110px;">
                                         <a href="@Url.Action("levels", new { id = item.id })" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Edit details">
                                             <i class="la la-edit"></i>
-                                        </a>                                       
+                                        </a>
+
+                                      
+                                        <a data-toggle="modal" data-target="#confirm-delete" data-href="@Url.Action("Removelevel", new { id=item.id})" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill DeleteBox" title="Delete"><i class="la la-trash"></i></a>
+
                                     </span>
                                 </td>
                             </tr>

@@ -1,0 +1,133 @@
+﻿@model List<NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.PackagesVM>
+@using NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels
+@{
+    ViewBag.Title = "AssignTeacherPackage";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin2.cshtml";
+    List<NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.TeacherVM> teachLst = (List<NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.TeacherVM>)ViewBag.TeacherLst;
+}
+
+<div class="row">
+    <div id="status_message" class="col-lg-12">@Html.Action(actionName: "TempMessage", controllerName: "Shared", routeValues: new { area = "" })</div>
+    <div class="col-lg-12">
+
+        <!--begin::Portlet-->
+        <div class="m-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <span class="m-portlet__head-icon m--hide">
+                            <i class="la la-gear"></i>
+                        </span>
+                        <h3 class="m-portlet__head-text">
+                            تعيين الباقة للمعلم
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <!--begin::Form-->
+            <form class="m-form m-form--fit" id="EditTeacherPackage" action="@Url.Action("AssignTeacherPackage")" method="post" enctype="multipart/form-data">
+                <div class="m-portlet__body">
+                    <div class="m-form__section m-form__section--first">
+                        <div class="m-form__section m-form__section--last">
+                            <div class="m-form__heading">
+                                <h3 class="m-form__heading-title"> الباقات المشترك بها :</h3>
+                            </div>
+                            @{
+                                var pacl = ViewBag.TeacherPack as List<NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.TeacherPackagesVM>;
+                            }
+                            @if (pacl != null && pacl.Count() > 0)
+                            {
+                                foreach (var item in ViewBag.TeacherPack as List<NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.TeacherPackagesVM>)
+                                {
+                                    <div class="m-form__group form-group row">
+                                        <div class="col-lg-2">
+                                            <label for="course_day" style="display:block">&nbsp; </label>
+                                            <label class="m-checkbox">
+                                                <input type="checkbox" name="teacher_times[0].dayOfWeek" checked disabled value="@item.TeacherPackId"> @item.PackName
+
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="example_input_full_name">الرسوم المطلوبه  </label>
+
+                                            <input type="text" class="form-control m-input   " disabled readonly value="@item.fees">
+
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="example_input_full_name">الحالة  </label>
+
+                                            <input type="text" class="form-control m-input  " disabled readonly value="@item.PaymentStatusName">
+
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="example_input_full_name">من تاريخ  </label>
+
+                                            <input type="text" class="form-control m-input  " disabled readonly value="@item.StartDate">
+
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="example_input_full_name">إلى تاريخ  </label>
+
+                                            <input type="text" class="form-control m-input  " disabled readonly value="@item.EndDate">
+
+                                        </div>
+                                        @if (item.PaymentStatus != 1)
+                                        {
+                                            <div class="col-md-2">
+                                                <label for="example_input_full_name"> تعديل الحالة لمدفوع </label>
+                                                <a data-toggle="modal" data-target="#confirm-assignPaaid" data-href="@Url.Action("MarkPaidTeacherPackage", new { TeacherPackId = item.TeacherPackId ,TeacherId=item.TeacherId})" class="btn btn-success m-btn m-btn--icon m-btn--icon-only MarkPaid" title="تعديل الحالة لمدفوع"><i class="la la-check-circle"></i></a>
+
+
+                                            </div>
+                                        }
+
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                
+                                <div class="col-md-6">
+                                    <label class="tt-hint">لا يوجد باقات مشترك بها </label>
+                                </div>
+                            }
+                        </div>
+
+                        <br />
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-6">
+                                <label>اشتراك في باقة جديدة </label>
+                                <div class="m-input-icon m-input-icon--left">
+                                    <select class="form-control m-input" id="PackId" name="PackId" required>
+                                        <option value="">-- اختر باقة  --</option>`
+                                        @foreach (var item in Model)
+                                        {
+                                    <option value="@item.PackId" )>@item.name @item.fees</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br />
+                    </div>
+                </div>
+                <input type="hidden" name="TeacherId" id="TeacherId" value="@ViewBag.teacherId"/>
+                <div class="m-portlet__foot m-portlet__no-border m-portlet__foot--fit">
+                    <div class="m-form__actions m-form__actions--solid">
+                        <button type="submit" class="btn btn-success">حفظ المتغيرات</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/assets/demo/default/custom/crud/forms/widgets/bootstrap-datetimepicker.js" type="text/javascript"></script>
+    <script>
+        $(".m_datetimepicker_7").datetimepicker({ format: "hh:ii", showMeridian: !0, todayHighlight: !0, autoclose: !0, startView: 1, minView: 0, maxView: 1, forceParse: 0, pickerPosition: "bottom-left" });
+    </script>
+}

@@ -8,7 +8,7 @@ using System.Web.Http;
 
 namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
 {
-    public class UserController : ApiController
+    public class UserController : BaseController
     {
 
         [AllowAnonymous]

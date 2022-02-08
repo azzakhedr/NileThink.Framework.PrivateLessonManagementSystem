@@ -51,11 +51,20 @@
     <Reference Include="ActionMailer.Net.Mvc, Version=0.7.4.0, Culture=neutral, PublicKeyToken=e62db3114c02a1c2, processorArchitecture=MSIL">
       <HintPath>..\packages\ActionMailer.0.7.4\lib\Net40\ActionMailer.Net.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="ClosedXML, Version=0.95.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.95.4\lib\net40\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.0.10.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.0.10\lib\net20\ExcelNumberFormat.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -168,6 +177,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
@@ -648,6 +658,16 @@
     <Content Include="Areas\Admin\Views\Dashboard\ComplainLst.cshtml" />
     <Content Include="Areas\Admin\Views\Teachers\ComplainLst.cshtml" />
     <Content Include="Areas\Teacher\Views\Dashboard\ComplainLst.cshtml" />
+    <Content Include="Areas\Teacher\Views\Course\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Teachers\TeacherRefunedRequests.cshtml" />
+    <Content Include="Areas\Admin\Views\Teachers\TeacReqLst.cshtml" />
+    <Content Include="Areas\Admin\Views\Teachers\WalletTransaction.cshtml" />
+    <Content Include="Areas\Admin\Views\Teachers\TeacherLst.cshtml" />
+    <Content Include="Areas\Admin\Views\Dashboard\Packages.cshtml" />
+    <Content Include="Areas\Admin\Views\Dashboard\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Teachers\EditTeacherPackage.cshtml" />
+    <Content Include="Areas\Admin\Views\Teachers\AssignTeacherPackage.cshtml" />
+    <Content Include="Areas\Admin\Views\Dashboard\SendNotificationFcm.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -655,6 +675,7 @@
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Views\Mailer\ForgetPassword.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -681,6 +702,9 @@
     <Content Include="Views\Mailer\inviteT.html.cshtml" />
     <Content Include="Views\Mailer\RegEmail.cshtml" />
     <Content Include="Views\Mailer\RegEmail.html.cshtml" />
+    <Content Include="Views\Home\ResetPassword.cshtml" />
+    <Content Include="Views\Home\PaymentNotify.cshtml" />
+    <Content Include="Views\Home\SendNotification.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

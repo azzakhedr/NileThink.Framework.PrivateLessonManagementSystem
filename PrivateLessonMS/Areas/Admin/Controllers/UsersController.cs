@@ -33,6 +33,26 @@ namespace PrivateLessonMS.Areas.Admin.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(adminModel model, HttpPostedFileBase photo_file)
         {
+
+            if (!ModelState.IsValid)
+            {
+                string error = "";
+                foreach (var item in ModelState.Values)
+                {
+                    if (item.Errors.Count() > 0)
+                    {
+                        foreach (var item2 in item.Errors)
+                        {
+                            error = error + item2.ErrorMessage+",";
+                        }
+                        
+
+                    }
+                }
+                TempData["Message"] = error;
+                TempData["Status"] = "danger";
+                return View();
+            }
             using (var context = new ApplicationDbContext())
             {
                 var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
@@ -64,9 +84,9 @@ namespace PrivateLessonMS.Areas.Admin.Controllers
 
                 };
 
-                string pass = System.Web.Security.Membership.GeneratePassword(8, 3);
-                var x = await UserManager.CreateAsync(user, pass);
-                await UserManager.AddToRoleAsync(user.Id, "3");
+               // string pass = System.Web.Security.Membership.GeneratePassword(8, 3);
+                var x = await UserManager.CreateAsync(user, model.Password);
+                await UserManager.AddToRoleAsync(user.Id, "Admin");
                 //AdminAddUser mail = new AdminAddUser()
                 //{
                 //    fullname = model.fullname,

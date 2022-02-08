@@ -1,0 +1,80 @@
+----------------------------------- Payment responseData 9/6/2021 10:33:32 PM -----------------
+Key: result Value: System.Collections.Generic.Dictionary`2[System.String,System.Object]
+Key: buildNumber Value: 688032272e43f7b48045064c7ab9b3568667bdb9@2021-09-02 07:03:03 +0000
+Key: timestamp Value: 2021-09-06 20:33:31+0000
+Key: ndc Value: 2CC3E032ECD6D7964EFB949F8DCE61D8.prod01-vm-tx05
+Key: id Value: 2CC3E032ECD6D7964EFB949F8DCE61D8.prod01-vm-tx05
+Key: code Value: 000.200.100
+Key: description Value: successfully created checkout
+responseData : System.Collections.Generic.Dictionary`2[System.String,System.Object]
+----------------------------------- Payment responseData9/6/2021 10:33:32 PM -----------------
+----------------------------------- Payment responseData 9/6/2021 10:40:07 PM -----------------
+Key: result Value: System.Collections.Generic.Dictionary`2[System.String,System.Object]
+Key: buildNumber Value: 688032272e43f7b48045064c7ab9b3568667bdb9@2021-09-02 07:03:03 +0000
+Key: timestamp Value: 2021-09-06 20:40:06+0000
+Key: ndc Value: 93B88D0E29692D01B0DC5AE8C02052DA.prod01-vm-tx03
+Key: id Value: 93B88D0E29692D01B0DC5AE8C02052DA.prod01-vm-tx03
+Key: code Value: 000.200.100
+Key: description Value: successfully created checkout
+responseData : System.Collections.Generic.Dictionary`2[System.String,System.Object]
+----------------------------------- Payment responseData9/6/2021 10:40:07 PM -----------------
+----------------------------------- Payment responseData 9/6/2021 10:43:27 PM -----------------
+Key: result Value: System.Collections.Generic.Dictionary`2[System.String,System.Object]
+Key: buildNumber Value: 688032272e43f7b48045064c7ab9b3568667bdb9@2021-09-02 07:03:03 +0000
+Key: timestamp Value: 2021-09-06 20:43:26+0000
+Key: ndc Value: AA8BD2E39332D041B07AB8CDC40016D4.prod01-vm-tx09
+Key: id Value: AA8BD2E39332D041B07AB8CDC40016D4.prod01-vm-tx09
+Key: code Value: 000.200.100
+Key: description Value: successfully created checkout
+responseData : System.Collections.Generic.Dictionary`2[System.String,System.Object]
+----------------------------------- Payment responseData9/6/2021 10:43:27 PM -----------------
+----------------------------------- Payment responseData 9/6/2021 10:52:36 PM -----------------
+Key: result Value: System.Collections.Generic.Dictionary`2[System.String,System.Object]
+Key: buildNumber Value: 688032272e43f7b48045064c7ab9b3568667bdb9@2021-09-02 07:03:03 +0000
+Key: timestamp Value: 2021-09-06 20:52:35+0000
+Key: ndc Value: ECBC7C04D8EBEA1327473CB72663A515.prod01-vm-tx05
+Key: id Value: ECBC7C04D8EBEA1327473CB72663A515.prod01-vm-tx05
+Key: code Value: 000.200.100
+Key: description Value: successfully created checkout
+responseData : System.Collections.Generic.Dictionary`2[System.String,System.Object]
+----------------------------------- Payment responseData9/6/2021 10:52:36 PM -----------------
+----------------------------------- Payment responseData 9/6/2021 10:54:22 PM -----------------
+Key: result Value: System.Collections.Generic.Dictionary`2[System.String,System.Object]
+Key: buildNumber Value: 688032272e43f7b48045064c7ab9b3568667bdb9@2021-09-02 07:03:03 +0000
+Key: timestamp Value: 2021-09-06 20:54:20+0000
+Key: ndc Value: 4D607645BE4C256D48625FAEBF172D8A.prod01-vm-tx10
+Key: id Value: 4D607645BE4C256D48625FAEBF172D8A.prod01-vm-tx10
+Key: code Value: 000.200.100
+Key: description Value: successfully created checkout
+responseData : System.Collections.Generic.Dictionary`2[System.String,System.Object]
+----------------------------------- Payment responseData9/6/2021 10:54:22 PM -----------------
+----------------------------------- Payment responseData 9/6/2021 10:55:36 PM -----------------
+Key: result Value: System.Collections.Generic.Dictionary`2[System.String,System.Object]
+Key: buildNumber Value: 688032272e43f7b48045064c7ab9b3568667bdb9@2021-09-02 07:03:03 +0000
+Key: timestamp Value: 2021-09-06 20:55:35+0000
+Key: ndc Value: F161C9B5A3DD423AAA174145BB433C56.prod01-vm-tx06
+Key: id Value: F161C9B5A3DD423AAA174145BB433C56.prod01-vm-tx06
+Key: code Value: 000.200.100
+Key: description Value: successfully created checkout
+responseData : System.Collections.Generic.Dictionary`2[System.String,System.Object]
+----------------------------------- Payment responseData9/6/2021 10:55:36 PM -----------------
+----------------------------------- Payment responseData 9/6/2021 10:58:11 PM -----------------
+Key: result Value: System.Collections.Generic.Dictionary`2[System.String,System.Object]
+Key: buildNumber Value: 688032272e43f7b48045064c7ab9b3568667bdb9@2021-09-02 07:03:03 +0000
+Key: timestamp Value: 2021-09-06 20:58:09+0000
+Key: ndc Value: E640F2101E4DE313C5FF89BEE4496804.prod01-vm-tx08
+Key: id Value: E640F2101E4DE313C5FF89BEE4496804.prod01-vm-tx08
+Key: code Value: 000.200.100
+Key: description Value: successfully created checkout
+responseData : System.Collections.Generic.Dictionary`2[System.String,System.Object]
+----------------------------------- Payment responseData9/6/2021 10:58:11 PM -----------------
+----------------------------------- Payment responseData 11/15/2021 5:11:45 PM -----------------
+Key: result Value: System.Collections.Generic.Dictionary`2[System.String,System.Object]
+Key: buildNumber Value: 7d602bf6cea39dea9f4b8d7b17b34cb90a046e7b@2021-11-04 07:36:27 +0000
+Key: timestamp Value: 2021-11-15 15:11:45+0000
+Key: ndc Value: 52AB433C39A3E64167D687090AE0D040.prod01-vm-tx08
+Key: id Value: 52AB433C39A3E64167D687090AE0D040.prod01-vm-tx08
+Key: code Value: 000.200.100
+Key: description Value: successfully created checkout
+responseData : System.Collections.Generic.Dictionary`2[System.String,System.Object]
+----------------------------------- Payment responseData11/15/2021 5:11:45 PM -----------------

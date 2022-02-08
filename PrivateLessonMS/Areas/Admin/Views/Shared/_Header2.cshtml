@@ -114,10 +114,10 @@
                         <div id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-light m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-light m-aside-header-menu-mobile--submenu-skin-light ">
                             <ul class="m-menu__nav  m-menu__nav--submenu-arrow ">
                                 @*<li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="click" aria-haspopup="true">
-                                    <a href="@Url.Action("Index","DashBoard")" class="m-menu__link" title="عرض الصفحة الرئيسية">
-                                        <span class="m-menu__item-here"></span><span class="m-menu__link-text">الرئيسية</span>
-                                    </a>
-                                </li>*@
+            <a href="@Url.Action("Index","DashBoard")" class="m-menu__link" title="عرض الصفحة الرئيسية">
+                <span class="m-menu__item-here"></span><span class="m-menu__link-text">الرئيسية</span>
+            </a>
+        </li>*@
                                 <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="click" m-menu-link-redirect="1" aria-haspopup="true">
                                     <a href="javascript:;" class="m-menu__link m-menu__toggle" title="Non functional dummy link">
                                         <span class="m-menu__item-here"></span><span class="m-menu__link-text">ادارة مدراء النظام</span><i class="m-menu__hor-arrow la la-angle-down"></i><i class="m-menu__ver-arrow la la-angle-right"></i>
@@ -176,8 +176,28 @@
                                                         <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Requests","Students")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">عرض طلبات الطلاب</span></a></li>
                                                         <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Rates","Students")" class="m-menu__link "><i class="m-menu__link-icon flaticon-clipboard"></i><span class="m-menu__link-text">عرض تقييمات الطلاب </span></a></li>
                                                         @*<li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Invites","Students")" class="m-menu__link "><i class="m-menu__link-icon flaticon-clipboard"></i><span class="m-menu__link-text">عرض الدعوات المرسلة للطلاب </span></a></li>
-                                                        <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Invites_Std","Students")" class="m-menu__link "><i class="m-menu__link-icon flaticon-clipboard"></i><span class="m-menu__link-text">ارسال دعوة الى طالب</span></a></li>*@
+                                <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Invites_Std","Students")" class="m-menu__link "><i class="m-menu__link-icon flaticon-clipboard"></i><span class="m-menu__link-text">ارسال دعوة الى طالب</span></a></li>*@
 
+                                                    </ul>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="click" m-menu-link-redirect="1" aria-haspopup="true">
+                                    <a href="javascript:;" class="m-menu__link m-menu__toggle" title="Non functional dummy link">
+                                        <span class="m-menu__item-here"></span><span class="m-menu__link-text">ادارة العمليات </span><i class="m-menu__hor-arrow la la-angle-down"></i><i class="m-menu__ver-arrow la la-angle-right"></i>
+                                    </a>
+                                    <div class="m-menu__submenu  m-menu__submenu--fixed m-menu__submenu--left" style="width:600px">
+                                        <span class="m-menu__arrow m-menu__arrow--adjust"></span>
+                                        <div class="m-menu__subnav">
+                                            <ul class="m-menu__content">
+                                                <li class="m-menu__item">
+                                                    <h3 class="m-menu__heading m-menu__toggle"><span class="m-menu__link-text">ادارة العمليات</span><i class="m-menu__ver-arrow la la-angle-right"></i></h3>
+                                                    <ul class="m-menu__inner">
+                                                        <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("WalletTransaction","Teachers")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">عرض كافة عمليات المحفظة </span></a></li>
+                                                       
                                                     </ul>
                                                 </li>
 
@@ -197,9 +217,10 @@
                                                     <h3 class="m-menu__heading m-menu__toggle"><span class="m-menu__link-text">ادارة المعلمين</span><i class="m-menu__ver-arrow la la-angle-right"></i></h3>
                                                     <ul class="m-menu__inner">
                                                         <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Index","Teachers")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">عرض المعلمين المسجلين</span></a></li>
-                                                        @*<li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Requests","Teachers")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">عرض عقود المعلمين </span></a></li>*@                                                        
+                                                        @*<li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Requests","Teachers")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">عرض عقود المعلمين </span></a></li>*@
                                                         <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Rates","Teachers")" class="m-menu__link "><i class="m-menu__link-icon flaticon-clipboard"></i><span class="m-menu__link-text">عرض تقييمات المعلمين</span></a></li>
                                                         @*<li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Invites_Teacher","Teachers")" class="m-menu__link "><i class="m-menu__link-icon flaticon-clipboard"></i><span class="m-menu__link-text">ارسال دعوة الى معلم</span></a></li>*@
+                                                        <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("TeacherRefunedRequests","Teachers")" class="m-menu__link "><i class="m-menu__link-icon flaticon-clipboard"></i><span class="m-menu__link-text"> طلبات سحب رصيد المعلمين</span></a></li>
 
                                                     </ul>
                                                 </li>
@@ -209,47 +230,47 @@
                                     </div>
                                 </li>
                                 @*<li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="click" m-menu-link-redirect="1" aria-haspopup="true">
-                                    <a href="javascript:;" class="m-menu__link m-menu__toggle" title="Non functional dummy link">
-                                        <span class="m-menu__item-here"></span><span class="m-menu__link-text">الادارة المالية</span><i class="m-menu__hor-arrow la la-angle-down"></i><i class="m-menu__ver-arrow la la-angle-right"></i>
-                                    </a>
-                                    <div class="m-menu__submenu  m-menu__submenu--fixed m-menu__submenu--left" style="width:600px">
-                                        <span class="m-menu__arrow m-menu__arrow--adjust"></span>
-                                        <div class="m-menu__subnav">
-                                            <ul class="m-menu__content">
-                                                <li class="m-menu__item">
-                                                    <h3 class="m-menu__heading m-menu__toggle"><span class="m-menu__link-text">التقارير والمطالبات المالية</span><i class="m-menu__ver-arrow la la-angle-right"></i></h3>
-                                                    <ul class="m-menu__inner">
-                                                        <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Index","Payments")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">مبالغ الدروس </span></a></li>
-                                                        <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Teachers","Payments")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">التحصيل المالي للمعلمين </span></a></li>
-                                                        <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Students","Payments")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">مبالغ متبقية على الطلاب </span></a></li>
-                                                    </ul>
-                                                </li>
+            <a href="javascript:;" class="m-menu__link m-menu__toggle" title="Non functional dummy link">
+                <span class="m-menu__item-here"></span><span class="m-menu__link-text">الادارة المالية</span><i class="m-menu__hor-arrow la la-angle-down"></i><i class="m-menu__ver-arrow la la-angle-right"></i>
+            </a>
+            <div class="m-menu__submenu  m-menu__submenu--fixed m-menu__submenu--left" style="width:600px">
+                <span class="m-menu__arrow m-menu__arrow--adjust"></span>
+                <div class="m-menu__subnav">
+                    <ul class="m-menu__content">
+                        <li class="m-menu__item">
+                            <h3 class="m-menu__heading m-menu__toggle"><span class="m-menu__link-text">التقارير والمطالبات المالية</span><i class="m-menu__ver-arrow la la-angle-right"></i></h3>
+                            <ul class="m-menu__inner">
+                                <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Index","Payments")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">مبالغ الدروس </span></a></li>
+                                <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Teachers","Payments")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">التحصيل المالي للمعلمين </span></a></li>
+                                <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Students","Payments")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">مبالغ متبقية على الطلاب </span></a></li>
+                            </ul>
+                        </li>
 
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>*@
+                    </ul>
+                </div>
+            </div>
+        </li>*@
 
                                 @*<li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="click" m-menu-link-redirect="1" aria-haspopup="true">
-                                    <a href="javascript:;" class="m-menu__link m-menu__toggle" title="Non functional dummy link">
-                                        <span class="m-menu__item-here"></span><span class="m-menu__link-text">الاشعارات والبلاغات</span><i class="m-menu__hor-arrow la la-angle-down"></i><i class="m-menu__ver-arrow la la-angle-right"></i>
-                                    </a>
-                                    <div class="m-menu__submenu  m-menu__submenu--fixed m-menu__submenu--left" style="width:600px">
-                                        <span class="m-menu__arrow m-menu__arrow--adjust"></span>
-                                        <div class="m-menu__subnav">
-                                            <ul class="m-menu__content">
-                                                <li class="m-menu__item">
-                                                    <h3 class="m-menu__heading m-menu__toggle"><span class="m-menu__link-text">اشعارات وبلاغات المستخدمين</span><i class="m-menu__ver-arrow la la-angle-right"></i></h3>
-                                                    <ul class="m-menu__inner">
-                                                        <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Index","Notifications")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">عرض كافة الاشعارات المرسلة </span></a></li>
-                                                        <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Create","Notifications")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">ارسال اشعار للمستخدمين </span></a></li>
-                                                    </ul>
-                                                </li>
+            <a href="javascript:;" class="m-menu__link m-menu__toggle" title="Non functional dummy link">
+                <span class="m-menu__item-here"></span><span class="m-menu__link-text">الاشعارات والبلاغات</span><i class="m-menu__hor-arrow la la-angle-down"></i><i class="m-menu__ver-arrow la la-angle-right"></i>
+            </a>
+            <div class="m-menu__submenu  m-menu__submenu--fixed m-menu__submenu--left" style="width:600px">
+                <span class="m-menu__arrow m-menu__arrow--adjust"></span>
+                <div class="m-menu__subnav">
+                    <ul class="m-menu__content">
+                        <li class="m-menu__item">
+                            <h3 class="m-menu__heading m-menu__toggle"><span class="m-menu__link-text">اشعارات وبلاغات المستخدمين</span><i class="m-menu__ver-arrow la la-angle-right"></i></h3>
+                            <ul class="m-menu__inner">
+                                <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Index","Notifications")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">عرض كافة الاشعارات المرسلة </span></a></li>
+                                <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Create","Notifications")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">ارسال اشعار للمستخدمين </span></a></li>
+                            </ul>
+                        </li>
 
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>*@
+                    </ul>
+                </div>
+            </div>
+        </li>*@
 
                                 <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="click" m-menu-link-redirect="1" aria-haspopup="true">
                                     <a href="javascript:;" class="m-menu__link m-menu__toggle" title="Non functional dummy link">
@@ -266,6 +287,11 @@
                                                         <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("Specialization","Settings")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">ادارة التخصصات الرئيسية </span></a></li>
                                                         <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("branch","Settings")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">ادارة التخصصات الفرعية </span></a></li>
                                                         <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("levels","Settings")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">ادارة المستويات التعليمية </span></a></li>
+                                                        <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="@Url.Action("edu_sub_level","Settings")" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">ادارة المستويات الفرعية </span></a></li>
+                                                        <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="/Admin/Dashboard/Packages" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">ادارة الباقات </span></a></li>
+                                                        <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true"><a href="/Admin/Dashboard/SendNotificationFcm" class="m-menu__link "><i class="m-menu__link-icon flaticon-map"></i><span class="m-menu__link-text">إرسال الإشعارات </span></a></li>
+
+
                                                     </ul>
                                                 </li>
 

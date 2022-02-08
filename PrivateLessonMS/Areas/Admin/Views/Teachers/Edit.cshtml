@@ -1,11 +1,19 @@
 ﻿@model NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.TeacherVM
-    @using NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels 
+@using NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels
 @{
     ViewBag.Title = "Create";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin2.cshtml";
     List<NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.TeacherAvailabilityVM> Ttimes = (List<NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels.TeacherAvailabilityVM>)ViewBag.tTimes;
 }
 
+@using (Html.BeginForm("AbsherExcel", "Teachers", new { area = "Admin", Id = Model.userId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+    <div>
+        <input type="submit" value="Export" class="btn btn-primary float-right mt-2" />
+    </div>
+
+}
 <div class="row">
     <div id="status_message" class="col-lg-12">@Html.Action(actionName: "TempMessage", controllerName: "Shared", routeValues: new { area = "" })</div>
     <div class="col-lg-12">
@@ -49,7 +57,7 @@
                                     </div>
                                 </div>*@
                             <div class="col-lg-12 text-center">
-                                @{ if (Model.absherInfoId == 1)
+                                @{ if (Model.absherInfoId == 1 || !String.IsNullOrEmpty(Model.absherNo))
                                     {
                                         <i class="la la-certificate" style="color:blue;font-size:44px;position:absolute"></i>
                                     }
@@ -185,147 +193,167 @@
                                 </div>
 
                             </div>*@
+
+                        @if (Model.absherInfoId == 1 || !String.IsNullOrEmpty(Model.absherNo))
+                        {
+
+                            <br />
+
+                            <div class="m-form__seperator m-form__seperator--dashed"></div>
+                            <div class="m-form__heading">
+                                <h3 class="m-form__heading-title">2. بيانات أبشر  : </h3>
+                            </div>
+                            <div class="form-group m-form__group row">
+                                <div class="col-md-6">
+                                    <label for="example_input_full_name">ابشر </label>
+                                    <input type="text" class="form-control m-input" name="first_name" value="@Model.absherNo" disabled>
+
+                                </div>
+
+                            </div>
+
+                        }
                         <br />
-                       
+
                         <div class="m-form__seperator m-form__seperator--dashed"></div>
-                      <div class="m-form__section m-form__section--last">
+                        <div class="m-form__section m-form__section--last">
                             <div class="m-form__heading">
                                 <h3 class="m-form__heading-title">3. مواعيد المعلم المتاحة :</h3>
                             </div>
-                          @foreach (var item in Ttimes)
-	{
-                      <div class="m-form__group form-group row">
-                          <div class="col-lg-2">
-                              <label for="course_day" style="display:block">&nbsp; </label>
-                              <label class="m-checkbox">
-                                  <input type="checkbox" name="teacher_times[0].dayOfWeek" value="@item.dayOfWeek"> @item.dayOfWeek
-                                  <span></span>
-                              </label>
-                          </div>
-                          <div class="col-md-4">
-                              <label for="example_input_full_name">من الساعة  </label>
+                            @foreach (var item in Ttimes)
+                            {
+                                <div class="m-form__group form-group row">
+                                    <div class="col-lg-2">
+                                        <label for="course_day" style="display:block">&nbsp; </label>
+                                        <label class="m-checkbox">
+                                            <input type="checkbox" name="teacher_times[0].dayOfWeek" value="@item.dayOfWeek"> @item.dayOfWeek
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">من الساعة  </label>
 
-                              <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[0].from" value="@item.fromTime">
+                                        <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[0].from" value="@item.fromTime">
 
-                          </div>
-                          <div class="col-md-4">
-                              <label for="example_input_full_name">حتى الساعة </label>
-                              <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[0].to" value="@(item.toTime)">
-                          </div>
-                      </div>
-	}
-                            
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">حتى الساعة </label>
+                                        <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[0].to" value="@(item.toTime)">
+                                    </div>
+                                </div>
+                            }
+
 
                             @*<div class="m-form__group form-group row">
-                                <div class="col-lg-2">
-                                    <label for="course_day" style="display:block">&nbsp; </label>
-                                    <label class="m-checkbox">
-                                        <input type="checkbox" name="teacher_times[1].day_number" value="1" @(Ttimes.Where(w => w.day_number == 1).FirstOrDefault() != null ? "checked" : "")> الأحد
-                                        <span></span>
-                                    </label>
+                                    <div class="col-lg-2">
+                                        <label for="course_day" style="display:block">&nbsp; </label>
+                                        <label class="m-checkbox">
+                                            <input type="checkbox" name="teacher_times[1].day_number" value="1" @(Ttimes.Where(w => w.day_number == 1).FirstOrDefault() != null ? "checked" : "")> الأحد
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">من الساعة  </label>
+                                        <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[1].from" value="@(Ttimes.Where(w=>w.day_number==1).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==1).FirstOrDefault().from:"")">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">حتى الساعة </label>
+                                        <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[1].to" value="@(Ttimes.Where(w=>w.day_number==1).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==1).FirstOrDefault().to:"")">
+                                    </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="example_input_full_name">من الساعة  </label>
-                                    <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[1].from" value="@(Ttimes.Where(w=>w.day_number==1).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==1).FirstOrDefault().from:"")">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="example_input_full_name">حتى الساعة </label>
-                                    <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[1].to" value="@(Ttimes.Where(w=>w.day_number==1).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==1).FirstOrDefault().to:"")">
-                                </div>
-                            </div>
 
 
-                            <div class="m-form__group form-group row">
-                                <div class="col-lg-2">
-                                    <label for="course_day" style="display:block">&nbsp; </label>
-                                    <label class="m-checkbox">
-                                        <input type="checkbox" name="teacher_times[2].day_number" value="2" @(Ttimes.Where(w => w.day_number == 2).FirstOrDefault() != null ? "checked" : "")> الاثنين
-                                        <span></span>
-                                    </label>
+                                <div class="m-form__group form-group row">
+                                    <div class="col-lg-2">
+                                        <label for="course_day" style="display:block">&nbsp; </label>
+                                        <label class="m-checkbox">
+                                            <input type="checkbox" name="teacher_times[2].day_number" value="2" @(Ttimes.Where(w => w.day_number == 2).FirstOrDefault() != null ? "checked" : "")> الاثنين
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">من الساعة  </label>
+                                        <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[2].from" value="@(Ttimes.Where(w=>w.day_number==2).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==2).FirstOrDefault().from:"")">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">حتى الساعة </label>
+                                        <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[2].to" value="@(Ttimes.Where(w=>w.day_number==2).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==2).FirstOrDefault().to:"")">
+                                    </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="example_input_full_name">من الساعة  </label>
-                                    <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[2].from" value="@(Ttimes.Where(w=>w.day_number==2).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==2).FirstOrDefault().from:"")">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="example_input_full_name">حتى الساعة </label>
-                                    <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[2].to" value="@(Ttimes.Where(w=>w.day_number==2).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==2).FirstOrDefault().to:"")">
-                                </div>
-                            </div>
 
 
-                            <div class="m-form__group form-group row">
-                                <div class="col-lg-2">
-                                    <label for="course_day" style="display:block">&nbsp; </label>
-                                    <label class="m-checkbox">
-                                        <input type="checkbox" name="teacher_times[3].day_number" value="3" @(Ttimes.Where(w => w.day_number == 3).FirstOrDefault() != null ? "checked" : "")> الثلاثاء
-                                        <span></span>
-                                    </label>
+                                <div class="m-form__group form-group row">
+                                    <div class="col-lg-2">
+                                        <label for="course_day" style="display:block">&nbsp; </label>
+                                        <label class="m-checkbox">
+                                            <input type="checkbox" name="teacher_times[3].day_number" value="3" @(Ttimes.Where(w => w.day_number == 3).FirstOrDefault() != null ? "checked" : "")> الثلاثاء
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">من الساعة  </label>
+                                        <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[3].from" value="@(Ttimes.Where(w=>w.day_number==3).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==3).FirstOrDefault().from:"")">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">حتى الساعة </label>
+                                        <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[3].to" value="@(Ttimes.Where(w=>w.day_number==3).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==3).FirstOrDefault().to:"")">
+                                    </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="example_input_full_name">من الساعة  </label>
-                                    <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[3].from" value="@(Ttimes.Where(w=>w.day_number==3).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==3).FirstOrDefault().from:"")">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="example_input_full_name">حتى الساعة </label>
-                                    <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[3].to" value="@(Ttimes.Where(w=>w.day_number==3).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==3).FirstOrDefault().to:"")">
-                                </div>
-                            </div>
 
 
-                            <div class="m-form__group form-group row">
-                                <div class="col-lg-2">
-                                    <label for="course_day" style="display:block">&nbsp; </label>
-                                    <label class="m-checkbox">
-                                        <input type="checkbox" name="teacher_times[4].day_number" value="4" @(Ttimes.Where(w => w.day_number == 4).FirstOrDefault() != null ? "checked" : "")> الاربعاء
-                                        <span></span>
-                                    </label>
+                                <div class="m-form__group form-group row">
+                                    <div class="col-lg-2">
+                                        <label for="course_day" style="display:block">&nbsp; </label>
+                                        <label class="m-checkbox">
+                                            <input type="checkbox" name="teacher_times[4].day_number" value="4" @(Ttimes.Where(w => w.day_number == 4).FirstOrDefault() != null ? "checked" : "")> الاربعاء
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">من الساعة  </label>
+                                        <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[4].from" value="@(Ttimes.Where(w=>w.day_number==4).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==4).FirstOrDefault().from:"")">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">حتى الساعة </label>
+                                        <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[4].to" value="@(Ttimes.Where(w=>w.day_number==4).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==4).FirstOrDefault().to:"")">
+                                    </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="example_input_full_name">من الساعة  </label>
-                                    <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[4].from" value="@(Ttimes.Where(w=>w.day_number==4).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==4).FirstOrDefault().from:"")">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="example_input_full_name">حتى الساعة </label>
-                                    <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[4].to" value="@(Ttimes.Where(w=>w.day_number==4).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==4).FirstOrDefault().to:"")">
-                                </div>
-                            </div>
 
-                            <div class="m-form__group form-group row">
-                                <div class="col-lg-2">
-                                    <label for="course_day" style="display:block">&nbsp; </label>
-                                    <label class="m-checkbox">
-                                        <input type="checkbox" name="teacher_times[5].day_number" value="5" @(Ttimes.Where(w => w.day_number == 5).FirstOrDefault() != null ? "checked" : "")> الخميس
-                                        <span></span>
-                                    </label>
+                                <div class="m-form__group form-group row">
+                                    <div class="col-lg-2">
+                                        <label for="course_day" style="display:block">&nbsp; </label>
+                                        <label class="m-checkbox">
+                                            <input type="checkbox" name="teacher_times[5].day_number" value="5" @(Ttimes.Where(w => w.day_number == 5).FirstOrDefault() != null ? "checked" : "")> الخميس
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">من الساعة  </label>
+                                        <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[5].from" value="@(Ttimes.Where(w=>w.day_number==5).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==5).FirstOrDefault().from:"")">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">حتى الساعة </label>
+                                        <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[5].to" value="@(Ttimes.Where(w=>w.day_number==5).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==5).FirstOrDefault().to:"")">
+                                    </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="example_input_full_name">من الساعة  </label>
-                                    <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[5].from" value="@(Ttimes.Where(w=>w.day_number==5).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==5).FirstOrDefault().from:"")">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="example_input_full_name">حتى الساعة </label>
-                                    <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_times[5].to" value="@(Ttimes.Where(w=>w.day_number==5).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==5).FirstOrDefault().to:"")">
-                                </div>
-                            </div>
 
 
-                            <div class="m-form__group form-group row">
-                                <div class="col-lg-2">
-                                    <label class="m-checkbox">
-                                        <input type="checkbox" name="teacher_day[6].day_number" value="6" @(Ttimes.Where(w => w.day_number == 6).FirstOrDefault() != null ? "checked" : "")> الجمعة
-                                        <span></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="example_input_full_name">من الساعة  </label>
-                                    <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_day[6].from" value="@(Ttimes.Where(w=>w.day_number==6).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==6).FirstOrDefault().from:"")">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="example_input_full_name">حتى الساعة </label>
-                                    <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_day[6].to" value="@(Ttimes.Where(w=>w.day_number==6).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==6).FirstOrDefault().to:"")">
-                                </div>
-                            </div>*@
+                                <div class="m-form__group form-group row">
+                                    <div class="col-lg-2">
+                                        <label class="m-checkbox">
+                                            <input type="checkbox" name="teacher_day[6].day_number" value="6" @(Ttimes.Where(w => w.day_number == 6).FirstOrDefault() != null ? "checked" : "")> الجمعة
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">من الساعة  </label>
+                                        <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_day[6].from" value="@(Ttimes.Where(w=>w.day_number==6).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==6).FirstOrDefault().from:"")">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="example_input_full_name">حتى الساعة </label>
+                                        <input type="text" class="form-control m-input m_datetimepicker_7" name="teacher_day[6].to" value="@(Ttimes.Where(w=>w.day_number==6).FirstOrDefault()!=null?Ttimes.Where(w=>w.day_number==6).FirstOrDefault().to:"")">
+                                    </div>
+                                </div>*@
 
                             <br />
                         </div>
@@ -347,7 +375,7 @@
                             <div class="col-md-12">
 
 
-                                @{ if (ViewBag.Courses != null)
+                                @{ if (ViewBag.banks != null)
                                     {
                                         <table class="table table-striped- table-bordered table-hover table-checkable" id="m_table_1">
                                             <thead>
@@ -355,18 +383,19 @@
                                                     <th title="Field #2" data-field="Owner">اسم البنك</th>
                                                     <th title="Field #2" data-field="Owner">اسم صاحب الحساب</th>
                                                     <th title="Field #2" data-field="Owner">الأيبان</th>
-                                                 
+
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var item in ViewBag.banks)
-                                                {
-                                                    <tr>
-                                                        <td>@item.bank_name</td>
-                                                        <td>@item.bank_account_name</td>
-                                                        <td>@item.bank_account</td>
-                                                       
-                                                    </tr>
+                                                @{
+                                                    var bankAccount = ViewBag.banks as NileThink.Framework.PrivateLessonManagementSystem.DAL.Models.sp_get_teacher_account_Result;
+                                                }
+                                                <tr>
+                                                    <td>@bankAccount.bank_name</td>
+                                                    <td>@bankAccount.user_account_name</td>
+                                                    <td>@bankAccount.iban</td>
+
+                                                </tr>
                                                 }
 
 
@@ -399,7 +428,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>اسم الدرس</th>
-                                                   @* <th>عدد الطلاب</th>*@
+                                                    @* <th>عدد الطلاب</th>*@
                                                     <th>تاريخ الانشاء</th>
                                                     <th>حالة الدرس</th>
                                                     <th>عمليات</th>
@@ -410,7 +439,7 @@
                                                 {
                                                     <tr>
                                                         <td>@item.title</td>
-                                                      @*  <td>@item.std_count</td>*@
+                                                        @*  <td>@item.std_count</td>*@
                                                         <td>@String.Format("{0:MM/dd/yyyy}", item.cdate)</td>
                                                         <td class="text-center">
                                                             @{

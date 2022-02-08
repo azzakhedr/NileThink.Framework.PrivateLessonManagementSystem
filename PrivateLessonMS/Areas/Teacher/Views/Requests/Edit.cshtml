@@ -109,7 +109,7 @@
                                         <span></span>
                                     </label>
                                     <label class="m-radio">
-                                        <input type="radio" required name="status" value="-1" @(Model.FirstOrDefault().status==-1?"checked":"") @(Model.FirstOrDefault().status==2|| Model.FirstOrDefault().status==1?"disabled":"") @(Model.FirstOrDefault().status!=0?"disabled":"")> رفض الطلب 
+                                        <input type="radio" required name="status" value="4" @(Model.FirstOrDefault().status==4?"checked":"")  @(Model.FirstOrDefault().status!=0?"disabled":"")> رفض الطلب 
                                         <span></span>
                                     </label>
                                 </div>

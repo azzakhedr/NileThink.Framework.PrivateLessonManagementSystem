@@ -35,7 +35,7 @@
                                         </div>
                                         <input type="text" class="form-control m-input" placeholder="عنوان التخصص" name="name" value="@(ViewBag.item !=null ?ViewBag.item.name:"" )">
                                     </div>
-                                    
+
                                     <div class="col-md-4">
                                         <div class="m-form__label">
                                             <label> &nbsp;</label>
@@ -59,22 +59,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @if (Model != null)
                         {
-                            <tr>
-                                <td>@(i++)</td>
-                                <td>@item.name</td>                                
-                                <td data-field="Actions" class="m-datatable__cell">
-                                    <span style="overflow: visible; position: relative; width: 110px;">
-                                        <a href="@Url.Action("Specialization", new { id = item.id })" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Edit details">
-                                            <i class="la la-edit"></i>
-                                        </a>
-                                        @*<a data-toggle="modal" data-target="#confirm-delete" data-href="@Url.Action("Deactive", new { id=item.Id})" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill DeleteBox" title="Delete"><i class="la la-trash"></i></a>*@
-                                    </span>
-                                </td>
-                            </tr>
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@(i++)</td>
+                                    <td>@item.name</td>
+                                    <td data-field="Actions" class="m-datatable__cell">
+                                        <span style="overflow: visible; position: relative; width: 110px;">
+                                            <a href="@Url.Action("Specialization", new { id = item.id })" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Edit details">
+                                                <i class="la la-edit"></i>
+                                            </a>
+                                            <a data-toggle="modal" data-target="#confirm-delete" data-href="@Url.Action("RemoveSpecialization", new { id = item.id })" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill DeleteBox" title="Delete"><i class="la la-trash"></i></a>
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
                         }
-
 
                     </tbody>
                 </table>

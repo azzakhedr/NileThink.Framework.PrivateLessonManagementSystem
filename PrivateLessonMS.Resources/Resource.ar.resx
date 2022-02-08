@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CanNotEvaluate" xml:space="preserve">
+    <value>لايمكنك التقييم</value>
+  </data>
+  <data name="DateAlreadyReceirved" xml:space="preserve">
+    <value>لم نتمكن من حجز الموعد لانه  محجوز من  قبل طالب اخر</value>
+  </data>
+  <data name="EmailSendSuccessfully" xml:space="preserve">
+    <value>تم إرسال البريد الإلكترونى بنجاج</value>
+  </data>
+  <data name="EmailUsedBefore" xml:space="preserve">
+    <value>البريد الالكترونى موجود مسبقاً يرجى ادخال بريد جديد</value>
+  </data>
+  <data name="EnterActivatedCode" xml:space="preserve">
+    <value>يرجى ادخال كود التفعيل المرسل على جوالك</value>
+  </data>
+  <data name="EnterServiceRequest" xml:space="preserve">
+    <value>يجب ادخال بيانات طلب الخدمة</value>
+  </data>
+  <data name="EnterStudentData" xml:space="preserve">
+    <value>يجب ادخال بيانات الطالب</value>
+  </data>
+  <data name="EnterTeacherData" xml:space="preserve">
+    <value>يجب ادخال بيانات المعلم</value>
+  </data>
+  <data name="ErrorOccure" xml:space="preserve">
+    <value>حدث خطأ   من فضلك ادخل بيانات صحيحة</value>
+  </data>
+  <data name="EvaluationSendedSuccessfully" xml:space="preserve">
+    <value>شكراً لك تم ارسال تقييم بنجاح</value>
+  </data>
+  <data name="Female" xml:space="preserve">
+    <value>أنثى</value>
+  </data>
+  <data name="InActiveUser" xml:space="preserve">
+    <value>هذا المستخدم غير فعال لدينا</value>
+  </data>
+  <data name="IncorrectActivatedCode" xml:space="preserve">
+    <value>كود التفعيل المستخدم خاطئ</value>
+  </data>
+  <data name="IncorrectData" xml:space="preserve">
+    <value>يرجى ادخال بيانات صحيحة</value>
+  </data>
+  <data name="IncorrectFile" xml:space="preserve">
+    <value>ملف غير صحيح</value>
+  </data>
+  <data name="LockedUser" xml:space="preserve">
+    <value>تم ايقاف حسابك لمزيد من التفاصيل يرجى التواصل مع الادارة</value>
+  </data>
+  <data name="Male" xml:space="preserve">
+    <value>ذكر</value>
+  </data>
+  <data name="NeedAbsher" xml:space="preserve">
+    <value>بحاجة للتسجيل في ابشر</value>
+  </data>
+  <data name="NeedUpdateProfile" xml:space="preserve">
+    <value>بحاجة لتعديل البروفايل</value>
+  </data>
+  <data name="NoContactMailFound" xml:space="preserve">
+    <value>لا يوجد بريد للتواصل برجاء الرجوع الى الإدارة</value>
+  </data>
+  <data name="NoCourseFound" xml:space="preserve">
+    <value>هنالك خطأ في البيانات لعدم وجود درس</value>
+  </data>
+  <data name="NotActivatedTeacher" xml:space="preserve">
+    <value>المعلم غير مفعل يرجى التواصل مع الادارة</value>
+  </data>
+  <data name="NotAuthorized" xml:space="preserve">
+    <value>ليس لديك صلاحية التعديل</value>
+  </data>
+  <data name="NotFoundTeacher" xml:space="preserve">
+    <value>هذا المعلم غير موجود</value>
+  </data>
+  <data name="NotRegisterUser" xml:space="preserve">
+    <value> هذا المستخدم غير مسجل لدينا</value>
+  </data>
+  <data name="PasswordChangeSuccessfully" xml:space="preserve">
+    <value>تم تغيير كلمة المرور بنجاح</value>
+  </data>
+  <data name="PasswordError" xml:space="preserve">
+    <value>هنالك خطأ في كلمة المرور يرجى التأكد منها</value>
+  </data>
+  <data name="PasswordFormat" xml:space="preserve">
+    <value>كلمة المرور 6 حروف على الأقل</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>معلق</value>
+  </data>
+  <data name="PhoneConfirmed" xml:space="preserve">
+    <value>تم تأكيد  رقم الجوال</value>
+  </data>
+  <data name="PhoneUsedBefore" xml:space="preserve">
+    <value>رقم الهاتف موجود مسبقاً يرجى ادخال رقم جديد</value>
+  </data>
+  <data name="RequestSendedSuccessfully" xml:space="preserve">
+    <value>تم ارسال طلبك بنجاح يرجى انتظار الرد في أقرب فرصة</value>
+  </data>
+  <data name="SavedSuccessfully" xml:space="preserve">
+    <value>تم الحفظ بنجاح</value>
+  </data>
+  <data name="SendEmail" xml:space="preserve">
+    <value>تم ارسال رسالة الى بريدك الالكتروني يرجى مراجعة الرسالة</value>
+  </data>
+  <data name="ServiceAccepted" xml:space="preserve">
+    <value>شكراً لك تم قبول طلب الخدمة</value>
+  </data>
+  <data name="ServiceRefused" xml:space="preserve">
+    <value>شكراً لك تم رفض طلب الخدمة</value>
+  </data>
+  <data name="StudentNotFound" xml:space="preserve">
+    <value>هذا الطالب غير موجود</value>
+  </data>
+  <data name="UserNamePasswordError" xml:space="preserve">
+    <value>اسم المستخدم أو كلمة المرور غير صحيحة</value>
+  </data>
+  <data name="UserUsedBefore" xml:space="preserve">
+    <value>اسم المستخدم موجود مسبقاً يرجى ادخال اسم مستخدم جديد</value>
+  </data>
+</root>

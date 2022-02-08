@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using NileThink.Framework.PrivateLessonManagementSystem.Web.Helper;
 using NileThink.Framework.PrivateLessonManagementSystem.Web.Models;
+using PrivateLessonMS.Resources;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -17,7 +18,7 @@ using System.Web.Http.Description;
 namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
 {
     [RoutePrefix("api/v1/Zoom")]
-    public class ZoomController : ApiController
+    public class ZoomController : BaseController
     {
        
         [AllowAnonymous]
@@ -27,9 +28,10 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
         [HttpGet]
         public IHttpActionResult CreateWebinar()
         {
+            string Lang = lang;
             CallApiCreateWebinarsnRequest();
 
-            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "هنالك خطأ في البيانات", true, null));
+            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, true, null));
 
         }
         // GET: Zoom

@@ -1,0 +1,34 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CallBack</title>
+</head>
+<body>
+    <div>
+        @if (ViewBag.success == 1)
+        {
+            <div> تم توثيق الحساب بنجاح</div>
+        }
+    </div>
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+<script>
+    @*if ('@ViewBag.success' == '1') {
+
+        setTimeout(function () {
+            closeWin();
+        }, 1000);
+    }
+    function closeWin() {
+        window.close();
+    }*@
+</script>

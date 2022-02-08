@@ -53,8 +53,22 @@ namespace PrivateLessonMS.Areas.Admin.Controllers
         {
 
 
-            _spec.RemoveSpecialization(id);
-            return getMessage(Enums.MStatus.check, "", "Specialization", "Settings");
+
+
+            try
+            {
+                _spec.RemoveSpecialization(id);
+                return getMessage(Enums.MStatus.check, "", "Specialization", "Settings");
+            }
+            catch
+            {
+                //return getMessage(Enums.MStatus.remove, "", "branch", "Settings");
+                TempData["Message"] = " تعذر حذف التخصص لارتباطه بالمعلمين والدروس";
+                TempData["Status"] = "danger";
+                var items = _spec.GetSpecializations().OrderByDescending(o => o.id).ToList();
+
+                return View("Specialization", items);
+            }
 
         }
 
@@ -118,7 +132,11 @@ namespace PrivateLessonMS.Areas.Admin.Controllers
             _spec.RemoveSpecializationBranch(null, id);
             return getMessage(Enums.MStatus.check, "", "branch", "Settings");
 
+
         }
+
+
+
         [HttpPost]
         public ActionResult branch(branch_specialization model)
         {
@@ -129,12 +147,14 @@ namespace PrivateLessonMS.Areas.Admin.Controllers
         }
 
 
-        public ActionResult edu_sub_level(int? id)
+        public ActionResult edu_sub_level(int? id, int? mainId)
         {
 
-            var items = _eduLevel.GetEducationSubLevels(null,null).OrderByDescending(o => o.id).ToList();
-            ViewBag.item = id.HasValue ? items.Where(w => w.id == id).FirstOrDefault() : null;
-            ViewBag.list = _spec.GetSpecializations();
+            var items = _eduLevel.GetEducationSubLevels(null, null).OrderByDescending(o => o.id).ToList();
+            var item = id.HasValue ? items.Where(w => w.id == id).FirstOrDefault() : null;
+            ViewBag.item = item;
+            ViewBag.mainId = mainId.HasValue ? mainId : (item != null ? item.mainId : null);
+            ViewBag.list = _eduLevel.GetEducationLevels().OrderByDescending(o => o.id).ToList();
             return View(items);
 
         }
@@ -166,5 +186,21 @@ namespace PrivateLessonMS.Areas.Admin.Controllers
             return getMessage(Enums.MStatus.check, "", "levels", "Settings");
 
         }
+
+        public ActionResult Removelevel(int id)
+        {
+
+            _eduLevel.RemoveEduLevel(id);
+            return getMessage(Enums.MStatus.check, "", "levels", "Settings");
+
+        }
+        public ActionResult RemoveSublevel(int id)
+        {
+
+            _eduLevel.RemoveSubEduLevel(id);
+            return getMessage(Enums.MStatus.check, "", "edu_sub_level", "Settings");
+
+        }
+        
     }
 }

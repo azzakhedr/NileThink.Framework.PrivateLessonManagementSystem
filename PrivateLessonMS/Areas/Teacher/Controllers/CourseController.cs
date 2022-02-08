@@ -53,7 +53,13 @@ namespace PrivateLessonMS.Areas.Teacher.Controllers
             return View(items);
 
         }
-       
+        public ActionResult Edit(int? id)
+        {
+
+            List<sp_get_courses_Result> c = _courseBll.getcoursesBasic(null, null, id, null, null);
+            return View(c);
+
+        }
         public ActionResult EditReport(int? cid, int std)
         {
             var user_id = Functions.GetUser().id;

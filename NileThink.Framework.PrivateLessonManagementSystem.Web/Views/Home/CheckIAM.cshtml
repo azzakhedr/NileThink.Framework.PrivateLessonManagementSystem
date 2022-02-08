@@ -1,0 +1,19 @@
+﻿
+@{
+    Layout = null;
+    string link = "https://iambeta.elm.sa/authservice/authorize?scope=openid&response_type=id_token&response_mode=form_post&client_id=16352727&redirect_uri=http://privatelessonforyou.com/Home/callback&nonce" + (Guid.NewGuid()) + "&ui_locales=ar&prompt=login&max_age=" + ViewBag.Time + "&state=" + @ViewBag.txt;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CheckIAM</title>
+</head>
+<body>
+   <form method="post" action="@link">
+       <button type="submit">Check IAM </button>
+   </form>
+</body>
+</html>

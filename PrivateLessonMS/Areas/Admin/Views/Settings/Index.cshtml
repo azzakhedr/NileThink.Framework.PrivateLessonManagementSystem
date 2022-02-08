@@ -1,4 +1,4 @@
-﻿A
+﻿
 @{
     ViewBag.Title = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin2.cshtml";
@@ -155,8 +155,16 @@
                 </div>
             </div>
         </div>*@
+                
+                <div class="form-group m-form__group row hidden">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>% نسبة الموقع من </label>
+                            <input class="form-control m-input" type="number" name="EntityPerc" value="@(s.Where(w=>w.key=="EntityPerc").FirstOrDefault()!=null?s.Where(w=>w.key=="EntityPerc").FirstOrDefault().value:"")" />
+                        </div>
 
-
+                    </div>
+                </div>
                 <div class="form-group m-form__group row">
                     <div class="col-md-12">
                         <hr />

@@ -1,4 +1,4 @@
-﻿using Microsoft.ApplicationInsights.Extensibility.Implementation;
+﻿//using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using NileThink.Framework.PrivateLessonManagementSystem.BLL.BussinessLayer;
 using NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels;
 using NileThink.Framework.PrivateLessonManagementSystem.Web.Helper;
@@ -18,52 +18,114 @@ using System.Web.Http.Description;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
+using System.Web;
+using PrivateLessonMS.Resources;
 
 namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
 {
     [RoutePrefix("api/v1/Payment")]
-    public class PaymentController : ApiController
+    public class PaymentController : BaseController
     {
         StudentBLL _studentBll = new StudentBLL();
         PaymentBLL _paymet = new PaymentBLL();
         RequestCourceBLL _request = new RequestCourceBLL();
         ScheduleLessonsBLL _lesson = new ScheduleLessonsBLL();
+
+        TeacherBLL _TeacherBll = new TeacherBLL();
+        NotificationBLL _notificationBLL = new NotificationBLL();
+        CommonController _comm = new CommonController();
+        PackageBLL _package = new PackageBLL();
+
         [Authorize]
         [Route("AddRequestPayment")]
         [ResponseType(typeof(string))]
         [ResponseCodes(HttpStatusCode.OK)]
         [HttpGet]
-        public IHttpActionResult AddRequestPayment(int requestId)
+        public IHttpActionResult AddRequestPayment(int requestId, string paymentBrand)
         {
+            string Lang = lang;
             try
             {
                 var Coursre = _request.GetRequestDetailsBytId(requestId);
                 if (Coursre != null)
                 {
                     var totalprice = CalculateVat(float.Parse(Coursre.totalPrice.ToString()));
-                    var request = GetCheckoutRequest(totalprice, requestId, Coursre.studentId);
+                    var responseData = GetCheckoutRequest(totalprice, requestId, Coursre.studentId, null, paymentBrand);
 
-                    if (request != null)
+                    PaymentModelResult model = new PaymentModelResult();
+
+
+                    if (responseData != null)
                     {
-                        try
+                        using (StreamWriter writetext = new StreamWriter(HttpContext.Current.Server.MapPath("~/write.txt"), true))
                         {
-
-
-
-                            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "تم ارسال طلبك بنجاح", true, new InviteResponse { checkoutId = request.id }));
+                            writetext.WriteLine("----------------------------------- Payment responseData " + DateTime.Now + " -----------------");
+                            foreach (var group in responseData)
+                            {
+                                writetext.WriteLine("Key: {0} Value: {1}", group.Key, group.Value);
+                            }
+                            foreach (var group in responseData["result"])
+                            {
+                                writetext.WriteLine("Key: {0} Value: {1}", group.Key, group.Value);
+                            }
+                            writetext.WriteLine("responseData : " + responseData);
+                            writetext.WriteLine("----------------------------------- Payment responseData" + DateTime.Now + " -----------------");
                         }
-                        catch
+
+                        foreach (var group in responseData)
                         {
-                            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "هنالك خطأ في البيانات", false, null));
+                            if (group.Key == "id")
+                            {
+                                model.checkout_id = group.Value;
+
+                            }
+                            if (group.Key == "ndc")
+                            {
+                                model.ndc = group.Value;
+
+                            }
+
+                            if (group.Key == "result")
+                            {
+                                foreach (var group2 in responseData["result"])
+                                {
+                                    if (group2.Key == "description")
+                                    {
+                                        model.description = group2.Value;
+                                        if (group2.Value == "successfully created checkout")
+                                        {
+                                            model.status = 1;
+                                            //  db.SaveChanges();
+                                        }
+                                        else
+                                        {
+                                            model.status = -1;
+                                        }
+
+                                    }
+                                    if (group.Key == "code")
+                                    {
+                                        model.code = group2.Value;
+                                    }
+
+
+                                }
+                            }
+
                         }
+
+
+                        return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "", true, model));
                     }
-                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "هنالك خطأ في البيانات", false, null));
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, null));
+
+
                 }
-                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "هنالك خطأ في البيانات", false, null));
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, null));
             }
             catch
             {
-                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "هنالك خطأ في البيانات", false, null));
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, null));
             }
 
 
@@ -74,18 +136,32 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
             return Price + (Price / 100) * float.Parse(Vat);
         }
 
-        public string CallApiRequest(float? amount, int? request_id, int? getway = 0)
+        public string CallApiRequest(float? amount, int? request_id, int? getway = 0, string paymentBrand = "")
         {
             try
             {
+                string EntityId = "";
+                if (paymentBrand == "VISA" || paymentBrand == "MASTER")
+                {
+
+                    EntityId = ConfigurationManager.AppSettings["HyperPayEntityIdVISA"].ToString();
+                }
+                else
+                {
+
+                    EntityId = ConfigurationManager.AppSettings["HyperPayEntityIdMADA"].ToString();
+                }
+
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-                string postData = ConfigurationManager.AppSettings["HyperPayEntityId"] +
+                string postData = EntityId +
                    "&amount=" + String.Format("{0:0.00}", amount) +
                    "&currency=SAR" +
                    "&paymentType=DB" +
                    "&notificationUrl=" + ConfigurationManager.AppSettings["HyperPayNotify"] + "/" + request_id;
 
-                string url = ConfigurationManager.AppSettings["HyperPayTestUrl"];// "https://test.oppwa.com/v1/checkouts";
+
+
+                string url = ConfigurationManager.AppSettings["HyperPayUrl"];// "https://test.oppwa.com/v1/checkouts";
 
                 byte[] byteArray = Encoding.UTF8.GetBytes(postData);
 
@@ -121,90 +197,172 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
         [Route("PaymentStatus")]
         [HttpGet]
         [ResponseType(typeof(PaymentModelResult))]
-        public IHttpActionResult PaymentStatus(string checkoutId, int requestId)
+        public IHttpActionResult PaymentStatus(string checkoutId, int requestId, string paymentBrand)
+
         {
+            string Lang = lang;
             try
             {
-
+                Regex successPattern = new Regex(@"(000\.000\.|000\.100\.1|000\.[36])");
+                Regex successManuelPattern = new Regex(@"(000\.400\.0[^3]|000\.400\.100)");
+                Regex pendingPattern = new Regex(@"(000\.200)");
+                bool match1success = false;
+                bool match2success = false;
+                bool matchpendingsuccess = false; ;
+                double out_amount = 0;
                 var Coursre = _request.GetRequestDetailsBytId(requestId);
                 if (Coursre != null)
                 {
-                   // var ZoomMeetings = GenerateZoom(requestId, DateTime.Now, DateTime.Now.AddHours(4));
+                    // var ZoomMeetings = GenerateZoom(requestId, DateTime.Now, DateTime.Now.AddHours(4));
                     //var t = ZoomUrl(99371489528);
                     var student = _studentBll.Student_GetById(Coursre.studentId);
-                   // if (student.userId != User.Identity.GetUserId()) return this.ResponseUnauthorized(new ResponseViewModel(HttpStatusCode.Unauthorized, "", false, null));
+                    // if (student.userId != User.Identity.GetUserId()) return this.ResponseUnauthorized(new ResponseViewModel(HttpStatusCode.Unauthorized, "", false, null));
                     var totalprice = CalculateVat(float.Parse(Coursre.totalPrice.ToString()));
-                    var Response = GetRequestStatus(checkoutId);
-                    var paymentmodel = new JavaScriptSerializer().Deserialize<PaymentModelResult>(Response);
-                    if (paymentmodel != null)
+                    var responseData = statusrequest(checkoutId, paymentBrand);
+                    // var responseData = GetRequestStatus(checkoutId, paymentBrand);
+
+                    PaymentModelResult model = new PaymentModelResult();
+                    if (responseData != null)
                     {
-                        
-                        if (paymentmodel.Result.code != null)
+                        foreach (var group in responseData)
                         {
-                            Regex successPattern = new Regex(@"(000\.000\.|000\.100\.1|000\.[36])");
-                            Regex successManuelPattern = new Regex(@"(000\.400\.0[^3]|000\.400\.100)");
-                            Match matchsuccess = successPattern.Match(paymentmodel.Result.code);
-                            Match matchManuel = successManuelPattern.Match(paymentmodel.Result.code);
-                            Regex pendingPattern = new Regex(@"(000\.200)");
-                            Match matchpending = pendingPattern.Match(paymentmodel.Result.code);
-                            if (matchpending.Success)
+                            if (group.Key == "ndc")
                             {
-                                var updateId = _request.RequestCourceUpdateStatus(requestId, 3, "Pending");
-                                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "", true, paymentmodel));
+                                model.ndc = group.Value;
+                                model.checkout_id = group.Value;
                             }
-                            if (matchsuccess.Success || matchManuel.Success)
+                            if (group.Key == "amount")
                             {
-                                var payment = new PaymentVM()
+                                out_amount = Convert.ToDouble(group.Value);
+                            }
+                            if (group.Key == "result")
+                            {
+                                foreach (var group2 in responseData["result"])
+                                {
+                                    if (group2.Key == "description")
+                                    {
+                                        model.description = group2.Value;
+
+
+                                    }
+                                    if (group2.Key == "code")
+                                    {
+                                        model.code = group2.Value;
+
+                                        Match match1 = successPattern.Match(group2.Value);
+                                        Match match2 = successManuelPattern.Match(group2.Value);
+                                        Match matchpending = pendingPattern.Match(group2.Value);
+                                        if (match1.Success)
+                                        {
+                                            match1success = true;
+                                        }
+                                        if (match2.Success)
+                                        {
+                                            match2success = true;
+                                        }
+                                        if (matchpending.Success)
+                                        {
+                                            matchpendingsuccess = true;
+                                        }
+
+                                    }
+
+
+                                }
+                            }
+
+                        }
+
+                        if (match1success || match2success)
+                        {
+                            var payment = new PaymentVM()
                             {
                                 CheckOut = checkoutId,
                                 PaymentStatus = "1",
                                 TotalPrice = totalprice
                             };
-                                
-                                    var id = _paymet.AddCoursePayment(payment, Coursre.requestId);
-                                // check if payment success
-                               
-                                    var dates = _request.GetRequestDatesByRequestId(requestId);
-                                    if (dates != null)
+
+                            var id = _paymet.AddCoursePayment(payment, Coursre.requestId);
+                            // check if payment success
+
+                            var dates = _request.GetRequestDatesByRequestId(requestId);
+                            if (dates != null)
+                            {
+                                foreach (var item in dates)
+                                {
+                                    var ZoomMeeting = GenerateZoom(requestId, item.startDate.Value, item.endDate.Value);
+                                    var lesson = new ScheduleLessonsVM()
                                     {
-                                    foreach (var item in dates)
-                                    {
-                                        var ZoomMeeting = GenerateZoom(requestId, item.startDate.Value, item.endDate.Value);
-                                        var lesson = new ScheduleLessonsVM()
-                                        {
-                                            requestId = requestId,
-                                            requestDateId = item.id,
-                                            startDate = ZoomMeeting.start_time,
-                                            endDate = ZoomMeeting.start_time.AddMinutes(ZoomMeeting.duration),
-                                            conferanceZoom = ZoomMeeting.start_url,
-                                            studentZoom = ZoomMeeting.join_url,
-                                            MeetingId= ZoomMeeting.id
+                                        requestId = requestId,
+                                        requestDateId = item.id,
+                                        startDate = ZoomMeeting.start_time,
+                                        endDate = ZoomMeeting.start_time.AddMinutes(ZoomMeeting.duration),
+                                        conferanceZoom = ZoomMeeting.start_url,
+                                        studentZoom = ZoomMeeting.join_url,
+                                        MeetingId = ZoomMeeting.id
 
 
-                                        };
-                                        var lessonid = _lesson.AddScheduleLesson(lesson);
+                                    };
+                                    var lessonid = _lesson.AddScheduleLesson(lesson);
 
-                                    }
-
-                                    var updateId = _request.RequestCourceUpdateStatus(requestId, 2, "Confirmed");
-                                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "", true, paymentmodel));
                                 }
+
+                                var updateId = _request.RequestCourceUpdateStatus(requestId, 2, "Confirmed");
+
+                                _paymet.InsertPaymentWalletTransaction(requestId, Coursre.teacherId, decimal.Parse(Coursre.totalPrice.ToString()));
+
+                                var lst = _notificationBLL.GetNotificationToken(Coursre.studentId, 1);
+
+
+                                var teacher = _TeacherBll.Teacher_GetById(Coursre.teacherId);
+                                //var student = studentBLL.Student_GetById(Coursre.studentId);
+                                dynamic returndata = new
+                                {
+                                    CourseId = Coursre.requestId,
+                                    teacherId = Coursre.teacherId,
+                                    teacherName = teacher.fullName,
+                                    studentId = Coursre.studentId,
+                                    studentName = student.fullName,
+                                    subject = Coursre.subject,
+                                    type = 4
+                                };
+                                string NotificationMessage = JsonConvert.SerializeObject(returndata);
+                                var title = "تمت عملية الدفع بنجاح";
+                                _notificationBLL.InsertUserNotification(new NotificationVM() { course_id = Coursre.requestId, details = NotificationMessage, title = title, typeId = 1, userId = Coursre.studentId, user_type = 1 });
+                                foreach (var item in lst)
+                                {
+                                    _comm.SendNotification(returndata, item.Token, 1, title);
+
+                                }
+                                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, model.description, true, model));
                             }
-                            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "هنالك خطأ في البيانات", false, null));
                         }
-                        
+                        if (matchpendingsuccess)
+                        {
+                            var updateId = _request.RequestCourceUpdateStatus(requestId, 3,Resource.Pending);
+                            // insert teacher amount -- entity amount
+                            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, model.description, true, model));
+                        }
+                        else
+                        {
+                            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, model.description, false, model));
+
+                        }
+                        return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, model.description, false, model));
+
                     }
-                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "هنالك خطأ في البيانات", false, null));
+
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, null));
                 }
-                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "هنالك خطأ في البيانات", false, null));
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.NoCourseFound, false, null));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "هنالك خطأ في البيانات", false, null));
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, ex.Message, false, null));
             }
 
         }
-        public PaymentModelResult GetCheckoutRequest(float? amount, int? request_id, int studentId, int? gateway = 0)
+        public Dictionary<string, dynamic> GetCheckoutRequest(float? amount, int? request_id, int studentId, int? gateway = 0, string paymentBrand = "")
         {
             var Student = _studentBll.Student_GetById(studentId);
             string email, firstname, surname, street, city, state;
@@ -216,30 +374,47 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
             city = string.IsNullOrEmpty(Student.city) ? Student.city : "unknown";
             state = string.IsNullOrEmpty(Student.district) ? Student.district : "unknown";
 
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-            PaymentModelResult responseData;
-            string data = ConfigurationManager.AppSettings["HyperPayEntityId"].ToString() +//  "entityId=8acda4cc77b5a3a30177ce2752532d43" +
-                "&amount=" + String.Format("{0:0.00}", amount) +
-                "&currency=SAR" +
-                "&paymentType=DB" +
-                "&notificationUrl=" + ConfigurationManager.AppSettings["HyperPayNotify"] + "/" + request_id +
-                "&customer.email=" + email +
-                "&billing.street1=" + street +
-                "&billing.city=" + city +
-                "&billing.state=" + state +
-                "&billing.country=SA" +
-                "&billing.postcode=11543" +
-                "&customer.givenName=" + firstname +
-                "&customer.surname=" + surname +
-                "&testMode=EXTERNAL" +
-                "&merchantTransactionId=" + Guid.NewGuid();
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            Dictionary<string, dynamic> responseData;
+            string EntityId = "";
+            var notifTrl = ConfigurationManager.AppSettings["ProjectURL"].ToString() + "/Home/PaymentNotify/" + request_id;
 
-            string url = ConfigurationManager.AppSettings["HyperPayUrl"];
-            // string url = " https://oppwa.com/v1/checkouts";
-            byte[] buffer = Encoding.ASCII.GetBytes(data);
+            StringBuilder data = new StringBuilder();
+
+            if (paymentBrand == "VISA" || paymentBrand == "MASTER")
+            {
+                data.Append(ConfigurationManager.AppSettings["HyperPayEntityIdVISA"].ToString());
+
+            }
+            else
+            {
+                data.Append(ConfigurationManager.AppSettings["HyperPayEntityIdMADA"].ToString());
+
+            }
+            data.Append("&notificationUrl=" + notifTrl);
+            data.Append("&amount=" + String.Format("{0:0.00}", amount));
+            data.Append("&currency=SAR");
+            data.Append("&paymentType=DB");
+            data.Append("&merchantTransactionId=" + Guid.NewGuid());
+            data.Append("&customer.surname=" + surname);
+            data.Append("&billing.street1=" + street);
+            data.Append("&billing.city=" + city);
+            data.Append("&billing.state=" + state);
+            data.Append("&billing.country=SA");
+            data.Append("&billing.postcode=" + "21577");
+            data.Append("&customer.email=" + email);
+            data.Append("&customer.givenName=" + firstname);
+
+
+            string url = ConfigurationManager.AppSettings["HyperPayUrl"].ToString();
+            byte[] buffer = Encoding.ASCII.GetBytes(data.ToString());
             HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
             request.Method = "POST";
-            request.Headers["Authorization"] = ConfigurationManager.AppSettings["HyperPayAuthorization"];// "Bearer OGFjZGE0Y2M3N2I1YTNhMzAxNzdjZTI2ZTU1NzJkM2J8WGpicVRxWjRCaw==";
+            //////////////////////////////////////Alllli////////////////////////////////////
+            request.Headers["Authorization"] = ConfigurationManager.AppSettings["HyperPayAuthorization"].ToString();
+
+            // request.Headers["Authorization"] = "Bearer OGFjN2E0Yzc3MDY4MjJjODAxNzA3NzcxYjVmMDBhNWR8aFo5Y2NIZkRYRQ==";
+            ////////////////////////////////////////Allli//////////////////////////////////////////////
             request.ContentType = "application/x-www-form-urlencoded";
             Stream PostData = request.GetRequestStream();
             PostData.Write(buffer, 0, buffer.Length);
@@ -248,21 +423,30 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
             {
                 Stream dataStream = response.GetResponseStream();
                 StreamReader reader = new StreamReader(dataStream);
-                responseData = new JavaScriptSerializer().Deserialize<PaymentModelResult>(reader.ReadToEnd());
+                var s = new System.Web.Script.Serialization.JavaScriptSerializer();
+                responseData = s.Deserialize<Dictionary<string, dynamic>>(reader.ReadToEnd());
                 reader.Close();
                 dataStream.Close();
             }
             return responseData;
         }
-        public string GetRequestStatus(string checkout_id)
+        public string GetRequestStatus(string checkout_id, string paymentBrand)
         {
             try
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-                string data = ConfigurationManager.AppSettings["HyperPayEntityId"].ToString();  //"entityId=8acda4cc77b5a3a30177ce2752532d43";
-                                                                                                // string url = "https://test.oppwa.com/v1/checkouts" + checkout_id + "/payment?" + data;
 
-                string url = ConfigurationManager.AppSettings["HyperPayUrl"]+"/" + checkout_id + "/payment?" + data;
+                string EntityId = "";
+                if (paymentBrand == "VISA" || paymentBrand == "MASTER")
+                {
+
+                    EntityId = ConfigurationManager.AppSettings["HyperPayEntityIdVISA"].ToString();
+                }
+                else
+                {
+                    EntityId = ConfigurationManager.AppSettings["HyperPayEntityIdMADA"].ToString();
+                }
+                string url = ConfigurationManager.AppSettings["HyperPayUrl"] + "/" + checkout_id;// + "/payment?" + EntityId;
 
 
 
@@ -292,7 +476,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                 }
             }
         }
-       
+
         public ZoomWebinar GenerateZoom(int requestId, DateTime startDate, DateTime endDate)
         {
             try
@@ -354,7 +538,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     html = reader.ReadToEnd();
-                   
+
                 }
                 var zoomMeeting = JsonConvert.DeserializeObject<ZoomWebinar>(html);
                 return zoomMeeting;
@@ -366,7 +550,342 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
             }
 
         }
-       
+
+
+        public Dictionary<string, dynamic> statusrequest(string checkout_id, string PaymentBrand)
+        {
+            Dictionary<string, dynamic> responseData;
+            string data = "";
+            if (PaymentBrand == "VISA" || PaymentBrand == "MASTER")
+            {
+
+                data = ConfigurationManager.AppSettings["HyperPayEntityIdVISA"].ToString();
+            }
+            else
+            {
+                data = ConfigurationManager.AppSettings["HyperPayEntityIdMADA"].ToString();
+            }
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            string url = ConfigurationManager.AppSettings["HyperPayUrl"] + "/" + checkout_id + "/payment?" + data;
+
+
+
+            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
+            request.Method = "GET";
+            //////////////////////////////Alllli///////////////////////////////////////
+            request.Headers["Authorization"] = ConfigurationManager.AppSettings["HyperPayAuthorization"].ToString();
+
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                Stream dataStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(dataStream);
+                var s = new JavaScriptSerializer();
+                responseData = s.Deserialize<Dictionary<string, dynamic>>(reader.ReadToEnd());
+                reader.Close();
+                dataStream.Close();
+            }
+            return responseData;
+        }
+
+
+        #region ---------- package Payment ----------
+        [Authorize]
+        [Route("AddPackagePayment")]
+        [ResponseType(typeof(string))]
+        [ResponseCodes(HttpStatusCode.OK)]
+        [HttpGet]
+        public IHttpActionResult AddPackagePayment(long TeacherPackId, string paymentBrand)
+        {
+            string Lang = lang;
+            try
+            {
+                var package = _package.GetTeacherPackById(TeacherPackId);
+                if (package != null)
+                {
+                    var totalprice = CalculateVat(float.Parse(package.fees.ToString()));
+                    var responseData = GetCheckoutPayment(totalprice, package.teacher_id, null, paymentBrand);
+
+                    PaymentModelResult model = new PaymentModelResult();
+
+
+                    if (responseData != null)
+                    {
+                        using (StreamWriter writetext = new StreamWriter(HttpContext.Current.Server.MapPath("~/write.txt"), true))
+                        {
+                            writetext.WriteLine("----------------------------------- Payment responseData " + DateTime.Now + " -----------------");
+                            foreach (var group in responseData)
+                            {
+                                writetext.WriteLine("Key: {0} Value: {1}", group.Key, group.Value);
+                            }
+                            foreach (var group in responseData["result"])
+                            {
+                                writetext.WriteLine("Key: {0} Value: {1}", group.Key, group.Value);
+                            }
+                            writetext.WriteLine("responseData : " + responseData);
+                            writetext.WriteLine("----------------------------------- Payment responseData" + DateTime.Now + " -----------------");
+                        }
+
+                        foreach (var group in responseData)
+                        {
+                            if (group.Key == "id")
+                            {
+                                model.checkout_id = group.Value;
+                                _package.UpdatePackageCheckOutId(package.id, model.checkout_id);
+
+                            }
+                            if (group.Key == "ndc")
+                            {
+                                model.ndc = group.Value;
+
+                            }
+
+                            if (group.Key == "result")
+                            {
+                                foreach (var group2 in responseData["result"])
+                                {
+                                    if (group2.Key == "description")
+                                    {
+                                        model.description = group2.Value;
+                                        if (group2.Value == "successfully created checkout")
+                                        {
+                                            model.status = 1;
+                                            //  db.SaveChanges();
+                                        }
+                                        else
+                                        {
+                                            model.status = -1;
+                                        }
+
+                                    }
+                                    if (group.Key == "code")
+                                    {
+                                        model.code = group2.Value;
+                                    }
+
+
+                                }
+                            }
+
+                        }
+
+
+                        return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "", true, model));
+                    }
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, null));
+
+
+                }
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, null));
+            }
+            catch (Exception e)
+            {
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, null));
+            }
+
+
+        }
+
+        public Dictionary<string, dynamic> GetCheckoutPayment(float? amount, int teacherId, int? gateway = 0, string paymentBrand = "")
+        {
+            var package = _package.GetCurrentPackageDataNotPaid(teacherId);
+            var teacher = package.Teacher;
+            string email, firstname, surname, street, city, state;
+
+            email = teacher.Email;
+            firstname = teacher.FirstName;
+            surname = teacher.LastName;
+            street =// !string.IsNullOrEmpty(teacher.streetNo) ? teacher.streetNo :
+                "unknown";
+            city = string.IsNullOrEmpty(teacher.CityName) ? teacher.CityName : "unknown";
+            state = string.IsNullOrEmpty(teacher.District) ? teacher.District : "unknown";
+
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            Dictionary<string, dynamic> responseData;
+            string EntityId = "";
+            var notifTrl = ConfigurationManager.AppSettings["ProjectURL"].ToString() + "/Home/PaymentNotify/" + package.id;
+
+            StringBuilder data = new StringBuilder();
+
+            if (paymentBrand == "VISA" || paymentBrand == "MASTER")
+            {
+                data.Append(ConfigurationManager.AppSettings["HyperPayEntityIdVISA"].ToString());
+
+            }
+            else
+            {
+                data.Append(ConfigurationManager.AppSettings["HyperPayEntityIdMADA"].ToString());
+
+            }
+            data.Append("&notificationUrl=" + notifTrl);
+            data.Append("&amount=" + String.Format("{0:0.00}", amount));
+            data.Append("&currency=SAR");
+            data.Append("&paymentType=DB");
+            data.Append("&merchantTransactionId=" + Guid.NewGuid());
+            data.Append("&customer.surname=" + surname);
+            data.Append("&billing.street1=" + street);
+            data.Append("&billing.city=" + city);
+            data.Append("&billing.state=" + state);
+            data.Append("&billing.country=SA");
+            data.Append("&billing.postcode=" + "21577");
+            data.Append("&customer.email=" + email);
+            data.Append("&customer.givenName=" + firstname);
+
+
+            string url = ConfigurationManager.AppSettings["HyperPayUrl"].ToString();
+            byte[] buffer = Encoding.ASCII.GetBytes(data.ToString());
+            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
+            request.Method = "POST";
+            //////////////////////////////////////Alllli////////////////////////////////////
+            request.Headers["Authorization"] = ConfigurationManager.AppSettings["HyperPayAuthorization"].ToString();
+
+            // request.Headers["Authorization"] = "Bearer OGFjN2E0Yzc3MDY4MjJjODAxNzA3NzcxYjVmMDBhNWR8aFo5Y2NIZkRYRQ==";
+            ////////////////////////////////////////Allli//////////////////////////////////////////////
+            request.ContentType = "application/x-www-form-urlencoded";
+            Stream PostData = request.GetRequestStream();
+            PostData.Write(buffer, 0, buffer.Length);
+            PostData.Close();
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                Stream dataStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(dataStream);
+                var s = new System.Web.Script.Serialization.JavaScriptSerializer();
+                responseData = s.Deserialize<Dictionary<string, dynamic>>(reader.ReadToEnd());
+                reader.Close();
+                dataStream.Close();
+            }
+            return responseData;
+        }
+
+
+        [Authorize]
+        [Route("PaymentPackageStatus")]
+        [HttpGet]
+        [ResponseType(typeof(PaymentModelResult))]
+        public IHttpActionResult PaymentPackageStatus(long TeacherPackId, string paymentBrand)
+
+        {
+            string Lang = lang;
+            try
+            {
+                Regex successPattern = new Regex(@"(000\.000\.|000\.100\.1|000\.[36])");
+                Regex successManuelPattern = new Regex(@"(000\.400\.0[^3]|000\.400\.100)");
+                Regex pendingPattern = new Regex(@"(000\.200)");
+                bool match1success = false;
+                bool match2success = false;
+                bool matchpendingsuccess = false; ;
+                double out_amount = 0;
+                var package = _package.GetTeacherPackById(TeacherPackId);
+                if (package != null)
+                {
+                    // var ZoomMeetings = GenerateZoom(requestId, DateTime.Now, DateTime.Now.AddHours(4));
+                    //var t = ZoomUrl(99371489528);
+                    //var teacher = _studentBll.Student_GetById(Coursre.studentId);
+                    // if (student.userId != User.Identity.GetUserId()) return this.ResponseUnauthorized(new ResponseViewModel(HttpStatusCode.Unauthorized, "", false, null));
+                    var totalprice = CalculateVat(float.Parse(package.fees.ToString()));
+                    var responseData = statusrequest(package.checkout_id, paymentBrand);
+                    // var responseData = GetRequestStatus(checkoutId, paymentBrand);
+
+                    PaymentModelResult model = new PaymentModelResult();
+                    if (responseData != null)
+                    {
+                        foreach (var group in responseData)
+                        {
+                            if (group.Key == "ndc")
+                            {
+                                model.ndc = group.Value;
+                                model.checkout_id = group.Value;
+                            }
+                            if (group.Key == "amount")
+                            {
+                                out_amount = Convert.ToDouble(group.Value);
+                            }
+                            if (group.Key == "result")
+                            {
+                                foreach (var group2 in responseData["result"])
+                                {
+                                    if (group2.Key == "description")
+                                    {
+                                        model.description = group2.Value;
+
+
+                                    }
+                                    if (group2.Key == "code")
+                                    {
+                                        model.code = group2.Value;
+
+                                        Match match1 = successPattern.Match(group2.Value);
+                                        Match match2 = successManuelPattern.Match(group2.Value);
+                                        Match matchpending = pendingPattern.Match(group2.Value);
+                                        if (match1.Success)
+                                        {
+                                            match1success = true;
+                                        }
+                                        if (match2.Success)
+                                        {
+                                            match2success = true;
+                                        }
+                                        if (matchpending.Success)
+                                        {
+                                            matchpendingsuccess = true;
+                                        }
+
+                                    }
+
+
+                                }
+                            }
+
+                        }
+
+                        if (match1success || match2success)
+                        {
+                            var payment = new PaymentVM()
+                            {
+                                CheckOut = package.checkout_id,
+                                PaymentStatus = "1",
+                                TotalPrice = totalprice
+                            };
+
+                            var id = _paymet.AddPackagePayment(payment, package.id);
+                            // check if payment success
+
+
+                        }
+                        if (matchpendingsuccess)
+                        {
+                            var payment = new PaymentVM()
+                            {
+                                CheckOut = package.checkout_id,
+                                PaymentStatus = "3",
+                                TotalPrice = totalprice
+                            };
+                            var id = _paymet.AddPackagePayment(payment, package.id);
+                            //var updateId = _request.RequestCourceUpdateStatus(requestId, 3, "Pending");
+                            // insert teacher amount -- entity amount
+                            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, model.description, true, model));
+                        }
+                        else
+                        {
+                            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, model.description, false, model));
+
+                        }
+                        return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, model.description, false, model));
+
+                    }
+
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, null));
+                }
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.NoCourseFound, false, null));
+            }
+            catch (Exception ex)
+            {
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, ex.Message, false, null));
+            }
+
+        }
+
+        #endregion
+
     }
-   
+
 }

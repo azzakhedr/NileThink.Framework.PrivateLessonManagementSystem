@@ -56,13 +56,17 @@
                                                 {
                                                     <span class="m-badge  m-badge--success m-badge--wide">مقبول</span>
                                                 }
-                                                if (item.status == -1)
+                                                if (item.status == 4)
                                                 {
                                                     <span class="m-badge  m-badge--danger m-badge--wide">مرفوض</span>
                                                 }
                                                 if (item.status == 2)
                                                 {
                                                     <span class="m-badge  m-badge--brand  m-badge--wide">مدفوع</span>
+                                                }
+                                                if (item.status == 3)
+                                                {
+                                                    <span class="m-badge  m-badge--brand  m-badge--wide">معلق</span>
                                                 }
                                             }
                                         </td>

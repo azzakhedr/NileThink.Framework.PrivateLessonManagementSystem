@@ -45,8 +45,6 @@
 
 <!-- end:: Page -->
 <!-- begin::Quick Sidebar -->
-
-
 <!-- end::Quick Sidebar -->
 <!-- begin::Scroll Top -->
 <div id="m_scroll_top" class="m-scroll-top">
@@ -56,16 +54,16 @@
 <!-- end::Scroll Top -->
 <!-- begin::Quick Nav -->
 @*<ul class="m-nav-sticky" style="margin-top: 30px;">
-    <li class="m-nav-sticky__item" data-toggle="m-tooltip" title="Purchase" data-placement="left">
-        <a href="https://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes" target="_blank"><i class="la la-cart-arrow-down"></i></a>
-    </li>
-    <li class="m-nav-sticky__item" data-toggle="m-tooltip" title="Documentation" data-placement="left">
-        <a href="https://keenthemes.com/metronic/documentation.html" target="_blank"><i class="la la-code-fork"></i></a>
-    </li>
-    <li class="m-nav-sticky__item" data-toggle="m-tooltip" title="Support" data-placement="left">
-        <a href="https://keenthemes.com/forums/forum/support/metronic5/" target="_blank"><i class="la la-life-ring"></i></a>
-    </li>
-</ul>*@
+        <li class="m-nav-sticky__item" data-toggle="m-tooltip" title="Purchase" data-placement="left">
+            <a href="https://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes" target="_blank"><i class="la la-cart-arrow-down"></i></a>
+        </li>
+        <li class="m-nav-sticky__item" data-toggle="m-tooltip" title="Documentation" data-placement="left">
+            <a href="https://keenthemes.com/metronic/documentation.html" target="_blank"><i class="la la-code-fork"></i></a>
+        </li>
+        <li class="m-nav-sticky__item" data-toggle="m-tooltip" title="Support" data-placement="left">
+            <a href="https://keenthemes.com/forums/forum/support/metronic5/" target="_blank"><i class="la la-life-ring"></i></a>
+        </li>
+    </ul>*@
 
 
 <!--end::Page Vendors -->
@@ -100,6 +98,96 @@
     </div>
 </div>
 <div class="modal fade" id="confirm-active" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">تأكيد عملية  التفعيل</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="m-alert m-alert--icon alert alert-warning" role="alert">
+                    <div class="m-alert__icon">
+                        <i class="la la-warning"></i>
+                    </div>
+                    <div class="m-alert__text">
+                        <strong>هل ترغب في  تفعيل هذا العنصر ؟ في حالة التأكيد سيكون العنصر متاح للاستخدام </strong>
+                    </div>
+                    <div class="m-alert__close">
+                        <button type="button" class="close" data-close="alert" aria-label="Hide"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+                <a class="btn btn-primary btn-ok">حفظ</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="confirm-multi-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">تأكيد عملية إلغاء التفعيل</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="m-alert m-alert--icon alert alert-warning" role="alert">
+                    <div class="m-alert__icon">
+                        <i class="la la-warning"></i>
+                    </div>
+                    <div class="m-alert__text">
+                        <strong>هل ترغب في  إالغاء تفعيل هذا العنصر ؟ في حالة التأكيد سيكون العنصر غير متاح للاستخدام </strong>
+                    </div>
+                    <div class="m-alert__close">
+                        <button type="button" class="close" data-close="alert" aria-label="Hide"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+                <a class="btn btn-primary btn-remove">حفظ</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-multi-delete_req" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">تأكيد عملية  الحذف</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="m-alert m-alert--icon alert alert-danger" role="alert">
+                    <div class="m-alert__icon">
+                        <i class="la la-danger"></i>
+                    </div>
+                    <div class="m-alert__text">
+                        <strong>هل ترغب في الغاء  هذا العنصر ؟  </strong>
+                    </div>
+                    <div class="m-alert__close">
+                        <button type="button" class="close" data-close="alert" aria-label="Hide"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+                <a class="btn btn-primary btn-remove">حفظ</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirm-multi-active" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -164,11 +252,56 @@
             modal.find('.btn-remove').attr('href', $(this).data('href'));
 
         });
-        
-    });
-        $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
+        $(".DeleteMultiBox").click(function () {
+            var modal = $('#confirm-multi-delete');
+            debugger;
+            var sList = "";
+            $('.MyTableCheckButton:checked').each(function () {
+                debugger;
+                if (sList != "") {
+                    sList = sList + ",";
+                }
+                sList = sList + $(this).attr("id");
+            });
+            var href = "/Admin/Teachers/DeactiveTeachers?Ids=" + sList;
+            modal.find('.btn-remove').attr('href', href);
+
+
+
         });
+        $(".ActiveMultiBox").click(function () {
+            var modal = $('#confirm-multi-active');
+            debugger;
+            var sList = "";
+            $('.MyTableCheckButton:checked').each(function () {
+                debugger;
+                if (sList != "") {
+                    sList = sList + ",";
+                }
+                sList = sList + $(this).attr("id");
+            });
+            var href = "/Admin/Teachers/ActiveTeachers?Ids=" + sList;
+            modal.find('.btn-ok').attr('href', href);
+        });
+        $(".DeleteMultiBoxd").click(function () {
+            debugger;
+
+            var modal = $('#confirm-multi-delete_req');
+            debugger;
+            var sList = "";
+            $('.MyTableCheckButton:checked').each(function () {
+                debugger;
+                if (sList != "") {
+                    sList = sList + ",";
+                }
+                sList = sList + $(this).attr("id");
+            });
+            var href = "/Admin/Teachers/DeleteTeachers?Ids=" + sList;
+            modal.find('.btn-remove').attr('href', href);
+        });
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
 </script>
 <!--end::Page Scripts -->
-	

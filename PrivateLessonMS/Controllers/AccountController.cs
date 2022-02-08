@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using NileThink.Framework.PrivateLessonManagementSystem.BLL.BussinessLayer;
 using PrivateLessonMS.Models;
 using System;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace PrivateLessonMS.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
+        TeacherBLL _teach = new TeacherBLL();
         public AccountController()
         {
         }
@@ -56,6 +58,7 @@ namespace PrivateLessonMS.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            
             ViewBag.lang = Language;
             ViewBag.ReturnUrl = returnUrl;
             return View();
@@ -65,7 +68,7 @@ namespace PrivateLessonMS.Controllers
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
-       
+
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
@@ -79,7 +82,7 @@ namespace PrivateLessonMS.Controllers
 
                 var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
                 var result = await UserManager.FindAsync(model.Email, model.Password);
-            
+
                 if (result != null)
                 {
                     //var res = await SignInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
@@ -90,7 +93,7 @@ namespace PrivateLessonMS.Controllers
                     //    return RedirectToAction("Login", "Home", new { area = "" });
                     //}
 
-                    if (result.Roles.Where(c => c.RoleId == "3") != null && (  result.Roles.Where(c=>c.RoleId == "3").Count()>0))
+                    if (result.Roles.Where(c => c.RoleId == "3") != null && (result.Roles.Where(c => c.RoleId == "3").Count() > 0))
                     {
                         Session["User"] = result;
                         return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
@@ -98,9 +101,18 @@ namespace PrivateLessonMS.Controllers
 
                     else if (result.Roles.Where(c => c.RoleId == "2") != null && (result.Roles.Where(c => c.RoleId == "2").Count() > 0))
                     {
-                        
-                        Session["User"] = result;
-                        return RedirectToAction("Index", "Dashboard", new { area = "Teacher" });
+                        if (_teach.Teacher_GetByUserId(result.Id).isActive == true)
+                        {
+                            Session["User"] = result;
+                            return RedirectToAction("Index", "Dashboard", new { area = "Teacher" });
+                        }
+                        else
+                        {
+                            TempData["Message"] = " المستخدم غير مفعل برجاء التواصل مع الإدارة";
+                            TempData["Status"] = "danger";
+                            return View(model);
+                        }
+
                     }
                     //else if (result.Roles.FirstOrDefault() != null && result.Roles.FirstOrDefault().RoleId == "3")
                     //{
@@ -144,7 +156,7 @@ namespace PrivateLessonMS.Controllers
         // POST: /Account/VerifyCode
         [HttpPost]
         [AllowAnonymous]
-       
+
         public async Task<ActionResult> VerifyCode(VerifyCodeViewModel model)
         {
             if (!ModelState.IsValid)
@@ -182,7 +194,7 @@ namespace PrivateLessonMS.Controllers
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
-       
+
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -299,7 +311,7 @@ namespace PrivateLessonMS.Controllers
         // POST: /Account/ForgotPassword
         [HttpPost]
         [AllowAnonymous]
-       
+
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -343,7 +355,7 @@ namespace PrivateLessonMS.Controllers
         // POST: /Account/ResetPassword
         [HttpPost]
         [AllowAnonymous]
-       
+
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -377,7 +389,7 @@ namespace PrivateLessonMS.Controllers
         // POST: /Account/ExternalLogin
         [HttpPost]
         [AllowAnonymous]
-       
+
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
             // Request a redirect to the external login provider
@@ -403,7 +415,7 @@ namespace PrivateLessonMS.Controllers
         // POST: /Account/SendCode
         [HttpPost]
         [AllowAnonymous]
-       
+
         public async Task<ActionResult> SendCode(SendCodeViewModel model)
         {
             if (!ModelState.IsValid)
@@ -453,7 +465,7 @@ namespace PrivateLessonMS.Controllers
         // POST: /Account/ExternalLoginConfirmation
         [HttpPost]
         [AllowAnonymous]
-       
+
         public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
@@ -490,7 +502,7 @@ namespace PrivateLessonMS.Controllers
         //
         // POST: /Account/LogOff
         [HttpPost]
-       
+
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
