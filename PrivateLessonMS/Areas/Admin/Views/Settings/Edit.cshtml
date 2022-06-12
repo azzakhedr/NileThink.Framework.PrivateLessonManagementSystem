@@ -1,0 +1,95 @@
+﻿@model NileThink.Framework.PrivateLessonManagementSystem.DAL.Models.tbl_membership
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin2.cshtml";
+}
+
+
+<div class="row">
+    <div id="status_message" class="col-lg-12">@Html.Action(actionName: "TempMessage", controllerName: "Shared", routeValues: new { area = "" })</div>
+    <div class="col-lg-12">
+
+        <!--begin::Portlet-->
+        <div class="m-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    .
+                    <div class="m-portlet__head-title">
+                        <span class="m-portlet__head-icon m--hide">
+                            <i class="la la-gear"></i>
+                        </span>
+                        <h3 class="m-portlet__head-text">
+                            تعديل الإشتراك المميز 
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <!--begin::Form-->
+            <form class="m-form m-form--fit" action="@Url.Action("Edit")" method="post" enctype="multipart/form-data">
+                <div class="m-portlet__body">
+                    <div class="m-form__section m-form__section--first">
+
+                        <div class="m-form__heading">
+                            <h3 class="m-form__heading-title">بيانات الإشتراك المميز : </h3>
+                        </div>
+                        <input type="hidden" name="id" value="@(Model!=null?Model.id:0)" />
+                        <input type="hidden" name="is_active" value="@(Model!=null&&Model.is_active.HasValue&&Model.is_active.Value?"true":"false")" />
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-6">
+                                <label for="example_input_full_name">إسم الباقة  </label>
+                                <input type="text" class="form-control m-input" name="name_ar" value="@Model.name_ar" required>
+
+                            </div>
+                            <div class="col-md-6">
+                                <label for="example_input_full_name">اسم الباقة (بالانجليزية) </label>
+                                <input type="text" class="form-control m-input" name="name_en" value="@Model.name_en" required>
+
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-6">
+                                <label for="example_input_full_name">مدة الباقة  </label>
+                                <input type="number" class="form-control m-input" name="period_no" value="@Model.period_no" required>
+
+                            </div>
+                            <div class="col-md-6">
+                                <label for="example_input_full_name">فترة الباقة </label>
+                                <div class="m-input-icon m-input-icon--left">
+                                    <select class="form-control m-input" name="period_type" required>
+                                        <option value="">-- فترة الباقة --</option>
+                                        <option value="1" @(Model != null && Model.period_type == 1 ? "selected" : "")>يوم</option>
+                                        <option value="2" @(Model != null && Model.period_type == 2 ? "selected" : "")>شهر</option>
+                                        <option value="3" @(Model != null && Model.period_type == 3 ? "selected" : "")>سنة</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-6">
+                                <label for="example_input_full_name">رسوم الباقة  </label>
+                                <input type="number" class="form-control m-input" name="cost" value="@Model.cost" required>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="m-portlet__foot m-portlet__no-border m-portlet__foot--fit">
+                    <div class="m-form__actions m-form__actions--solid">
+                        <button type="submit" class="btn btn-success">حفظ المتغيرات</button>
+                        <button type="reset" class="btn btn-secondary">الغاء الأمر</button>
+                    </div>
+                </div>
+            </form>
+
+            <!--end::Form-->
+        </div>
+
+        <!--end::Portlet-->
+    </div>
+</div>

@@ -15,6 +15,10 @@ using NileThink.Framework.PrivateLessonManagementSystem.DAL.Models;
 using NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels;
 using Microsoft.AspNet.Identity;
 using PrivateLessonMS.Resources;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+
+
 
 namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
 {
@@ -27,10 +31,12 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
         CertificateTypesBLL _certificateTypesBLL = new CertificateTypesBLL();
         MaterialsBLL _materialBll = new MaterialsBLL();
         ComplainTypesBLL _complainTypes = new ComplainTypesBLL();
-
-
         BankAccountBLL _bankAccountBll = new BankAccountBLL();
         TeacherRequestRefunedBll _teacherRequestRefunedBll = new TeacherRequestRefunedBll();
+        AdvertiseBannersBLL _adBannersBll = new AdvertiseBannersBLL();
+
+        EducationLevelTreeBLL _educationLevelTreeBll = new EducationLevelTreeBLL();
+
         [AllowAnonymous]
         [Route("GetAllCity")]
         [ResponseType(typeof(List<string>))]
@@ -408,6 +414,48 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
             }
 
         }
+
+
+
+        #region Advertise Banners
+
+        [Route("GetAdvertiseBanners")]
+        [HttpPost]
+        public IHttpActionResult GetAdvertiseBanners(AdvertiseBannersVM data)
+        {
+            string Lang = lang;
+            try
+            {
+                var res = _adBannersBll.GetApiAdvertiseBanners(data);
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "", true, res));
+            }
+            catch (Exception ex)
+            {
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, null));
+            }
+        }
+        #endregion
+
+
+        #region EducationLevelTree
+        [Route("GetEducationLevelTree")]
+        [HttpPost]
+        public IHttpActionResult GetEducationLevelTree()
+        {
+            string Lang = lang;
+            try
+            {
+                var res = _educationLevelTreeBll.GetEducationLevel();
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "", true, res));
+            }
+            catch (Exception ex)
+            {
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, null));
+            }
+        }
+        #endregion
+
+
 
     }
 }

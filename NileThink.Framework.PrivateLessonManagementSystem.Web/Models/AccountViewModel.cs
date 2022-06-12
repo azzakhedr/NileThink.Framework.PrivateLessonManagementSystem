@@ -26,7 +26,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
         public string city { get; set; }
         public string region { get; set; }
         public DateTime? birthDate { get; set; }
-        [JsonIgnore]
+        //[JsonIgnore]
         public string country { get; set; }
         public int? status { get; set; }
         public string photo { get; set; }
@@ -56,7 +56,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
         public string district { get; set; }
         public string birthDate { get; set; }
         public string AbsherUserId { get; set; }
- 
+
         public string country { get; set; }
         public int? status { get; set; }
         public string photo { get; set; }
@@ -68,8 +68,8 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
         public string streetNo { get; set; }
         public int teachingMechanism { get; set; }
         public List<EducationLevel> educationLevel { get; set; }
-
-
+        public bool genderId { get; set; }
+        public bool IsOnline { get; set; }
     }
     public class AvailableTeacher
     {
@@ -99,10 +99,11 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
     }
     public class teacherAvailability
     {
-        public int teacherId { get; set; }
+        public int? teacherId { get; set; }
         public string dayOfWeek { get; set; }
         public string fromTime { get; set; }
         public string toTime { get; set; }
+        public int Type { get; set; }
         //public int FromMinutes { get; set; }
         //public int ToMinutes { get; set; }
         //public string FromTime { get; set; }
@@ -133,14 +134,14 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
     }
     public class BookedTimes
     {
-        [JsonIgnore]
+        //[JsonIgnore]
         List<BookedDates> bookedDates { get; set; }
         public DateTime? startDate { get; set; }
         public DateTime? endDate { get; set; }
     }
     public class BookedDates
     {
-        [JsonIgnore]
+        //[JsonIgnore]
         public DateTime BookDate { get; set; }
         public string startDate { get; set; }
 
@@ -169,15 +170,15 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
         public string certificate { get; set; }
         public double? onlineCost { get; set; }
         public double? siteCost { get; set; }
-        public GeneralList branchSpecializations { get; set; }
-        public GeneralList specializations { get; set; }
+        //public GeneralList branchSpecializations { get; set; }
+        //public GeneralList specializations { get; set; }
         public string specialization { get; set; }
         public string branchSpecialization { get; set; }
         public int? totalCourse { get; set; }
         public float? rating { get; set; }
         public string email { get; set; }
         public int teachingMechanism { get; set; }
-        [JsonIgnore]
+        //[JsonIgnore]
         public string createdDate { get; set; }
 
         public string photo { get; set; }
@@ -187,9 +188,9 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
         public int? absher { get; set; }
         public string absher_no { get; set; }
         public bool? online { get; set; }
-        [JsonIgnore]
+        //[JsonIgnore]
         public string period { get; set; }
-        [JsonIgnore]
+        //[JsonIgnore]
         public string material { get; set; }
         public string city { get; set; }
         public string birthDate { get; set; }
@@ -199,20 +200,31 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
         public string AbsherUserId { get; set; }
         public bool isComplete { get; set; }
         public int status { get; set; }
-        public List<EducationLevel> educationLevel { get; set; }
+        //public List<EducationLevel> educationLevel { get; set; }
         public List<teacherAvailability> teacherAvailability { get; set; }
         public List<Materials> teacherMaterials { get; set; }
         public bool IsPackageAvailable { get; set; }
         public List<PackageDataLstVM> PackageLst { get; set; }
         public List<TeacherPackagesVM> TeacherPacks { get; set; }
         public string requireUpdateProfileAbsher { get; set; }
+        public bool? genderId { get; set; }
+        public decimal EntityPerc { get; set; }
+        public List<TeacherAvailabilityVMObj> AvailableTimeLst { get;  set; }
+        public bool IsOnline { get; set; }
+        public double? GroupOnlineCost { get; set; }
+        public double? GroupSiteCost { get; set; }
+        public List<EducationLevelTreeVM> educationLevelTree { get;  set; }
+        public string Certificatephoto { get;  set; }
+        public List<TeacherPackagesVM> MembershipPack { get;  set; }
+        public bool IsCurrentMembershipPackage { get; internal set; }
+        public List<MembershipVM> AllMembershipPackage { get; internal set; }
     }
     public class TeacherPackageDetailsResponse
     {
 
         public bool IsPackageAvailable { get; set; }
-        public List<PackageDataLstVM> PackageLst { get; internal set; }
-        public List<TeacherPackagesVM> TeacherPacks { get; internal set; }
+        public List<PackageDataLstVM> PackageLst { get; set; }
+        public List<TeacherPackagesVM> TeacherPacks { get; set; }
     }
     public class UploadModel
     {
@@ -274,17 +286,23 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
         public double? totalPrice { get; set; }
         public double? totalHours { get; set; }
         public List<RequestCourceDates> courseDates { get; set; }
-        public string AddressName { get;  set; }
+        public string AddressName { get; set; }
+        public string specializationName { get; set; }
+        public string subSpecializationName { get; set; }
+        public int? spec_id { get; internal set; }
+        public int? sub_spec_id { get; internal set; }
     }
     public class RequestCourceDates
     {
-        [JsonIgnore]
+        //[JsonIgnore]
         public int id { get; set; }
-
+        // [JsonIgnore]
+         public int idFk { get; set; }
+        public int type { get; set; }
         public int requestId { get; set; }
         public DateTime? startDate { get; set; }
         public DateTime? endDate { get; set; }
-
+        public string LiveUrl { get; internal set; }
     }
     public class FileDesc
     {
@@ -309,7 +327,10 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
         public string material { get; set; }
         public string studentName { get; set; }
         public int? TeachingMehod { get; set; }
-
+        public int? SpecId { get; set; }
+        public int? SubSpecId { get; set; }
+        public int? LevelId { get; set; }
+        public int? SubLevelId { get; set; }
     }
     public class LessonStudentModel
     {
@@ -321,7 +342,10 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
         public string material { get; set; }
         public string teacherName { get; set; }
         public int? TeachingMehod { get; set; }
-
+        public int? spec_id { get; set; }
+        public int? sub_spec_id { get; set; }
+        public int? level_id { get; set; }
+        public int? sub_level_id { get; set; }
     }
     public class CourseModel
     {
@@ -342,7 +366,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
         public DateTime startDate { get; set; }
         public DateTime endDate { get; set; }
         public NewRequestListViewModel requestDetails { get; set; }
-        public object AddressName { get;  set; }
+        public object AddressName { get; set; }
     }
     public class RateModel
     {
@@ -405,6 +429,17 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
         public string userName { get; set; }
         public string password { get; set; }
     }
+
+    public class ActivateCodeModel
+    {
+        public string Email { get; set; }
+        public string Code { get; set; }
+    }
+
+    public class ResendCodeModel
+    {
+        public string Email { get; set; }
+    }
     public class RegisterUserModel
     {
         public string email { get; set; }
@@ -415,6 +450,8 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
         public string lastName { get; set; }
 
         public string country { get; set; }
+
+
 
     }
     public class TeacherResponseModel : GeneralUserResponseModel
@@ -442,6 +479,15 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
         public List<Materials> teacherMaterials { get; set; }
         public int? rate { get; set; }
         public int? absher { get; set; }
+        public bool IsOnline { get; set; }
+        public List<EducationLevelTreeVM> EducationLevelTree { get; set; }
+
+        public decimal membershipFees { get; set; }
+        public DateTime? membershipFromDate { get; set; }
+        public DateTime? membershipToDate { get; set; }
+        public string membershipNameAr { get; set; }
+        public string membershipNameEn { get; set; }
+        public bool IsMembership { get; set; }
     }
     public class TeacherTimes
     {
@@ -476,8 +522,12 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Models
         public string country { get; set; }
         public string requireUpdateProfileAbsher { get; set; }
         public string userId { get; set; }
-        public string absher_id { get; internal set; }
+        public string absher_id { get; set; }
         public string AbsherUserId { get; set; }
+        public string gender { get; set; }
+        public bool genderId { get; set; }
+        public decimal EntityPerc { get; set; }
+        public bool IsNeedActivate { get; internal set; }
         //public string absher_no { get; set; }
     }
     public class RegisterEmail

@@ -83,81 +83,81 @@ namespace PrivateLessonMS.Areas.Admin.Controllers
         {
             return View();
         }
-//        [HttpPost]
-//        public ActionResult Create(CreateCourse model, int? request_id=0)
-//        {
-//            RequestCourceVM Request = new RequestCourceVM() { 
-            
-//            comment=model.details,courceStatus="1",createdAt=DateTime.Now,pricePerHour=double.Parse(model.cost.ToString()),
-//           // latitude=model.l
-//requestId=request_id.Value,requestStatus=1,teacherId=model.teacher_id,teachingMechanism=model.teaching_mechanism,teachingMechanismStatus,
-//            };
-            
-//            List<RequestCourceDates> ct = new List<RequestCourceDates>();
+        //        [HttpPost]
+        //        public ActionResult Create(CreateCourse model, int? request_id=0)
+        //        {
+        //            RequestCourceVM Request = new RequestCourceVM() { 
 
-       
-//            if (model.schedual != null)
-//            {
-//                foreach (var item in model.schedual)
-//                {
-//                    RequestCourceDates _ct = new RequestCourceDates()
-//                    {
-//                        startDate = item.Date.Add(item.TimeOfDay),
-//                        endDate = item.Date.Add(item.TimeOfDay)
+        //            comment=model.details,courceStatus="1",createdAt=DateTime.Now,pricePerHour=double.Parse(model.cost.ToString()),
+        //           // latitude=model.l
+        //requestId=request_id.Value,requestStatus=1,teacherId=model.teacher_id,teachingMechanism=model.teaching_mechanism,teachingMechanismStatus,
+        //            };
 
-//                    };
-//                    ct.Add(_ct);
-//                }
-//            }
-
-//            RequestCource c = new RequestCource()
-//            {
-//                Subject = model.title,
-//                //allow_sound = (model.live_type == "both" || model.live_type == "audio") ? true : false,
-//                //allow_video = (model.live_type == "both" || model.live_type == "video") ? true : false,
-//                CreatedAt = DateTime.Now,
-//                PricePerHour = model.cost,
-//                Comment = model.details,
-//                //lectures_count = model.lectures_count,
-//                //period = model.period,
-//                //start_date = model.start_date,
-//                //start_time = model.start_date.HasValue ? model.start_date.Value.TimeOfDay : DateTime.Now.TimeOfDay,
-//                TeacherId = model.teacher_id,
-//                Status = 1,
-//                //te = model.teaching_mechanism,
-//                //total_std = model.total_std,
-//                re = ct
-
-//            };
-//            ScheduleLesson xx = new ScheduleLesson()
-//            {
-   
-//                a = (model.live_type == "both" || model.live_type == "audio") ? true : false,
-//                allow_video = (model.live_type == "both" || model.live_type == "video") ? true : false,
-//                cdate = DateTime.Now,
-//                cost = model.cost,
-//                details = model.details,
-//                lectures_count = model.lectures_count,
-//                period = model.period,
-//                start_date = model.start_date,
-//                start_time = model.start_date.HasValue ? model.start_date.Value.TimeOfDay : DateTime.Now.TimeOfDay,
-//                teacher_id = model.teacher_id,
-//                status = 1,
-//                te = model.teaching_mechanism,
-//                total_std = model.total_std,
-//                Course_Times = ct
-
-//            };
-//            db.Courses.Add(c);
-//            db.SaveChanges();
-//            return getMessage(Enums.MStatus.check, "", "Index", "Course");
+        //            List<RequestCourceDates> ct = new List<RequestCourceDates>();
 
 
-//        }
+        //            if (model.schedual != null)
+        //            {
+        //                foreach (var item in model.schedual)
+        //                {
+        //                    RequestCourceDates _ct = new RequestCourceDates()
+        //                    {
+        //                        startDate = item.Date.Add(item.TimeOfDay),
+        //                        endDate = item.Date.Add(item.TimeOfDay)
+
+        //                    };
+        //                    ct.Add(_ct);
+        //                }
+        //            }
+
+        //            RequestCource c = new RequestCource()
+        //            {
+        //                Subject = model.title,
+        //                //allow_sound = (model.live_type == "both" || model.live_type == "audio") ? true : false,
+        //                //allow_video = (model.live_type == "both" || model.live_type == "video") ? true : false,
+        //                CreatedAt = DateTime.Now,
+        //                PricePerHour = model.cost,
+        //                Comment = model.details,
+        //                //lectures_count = model.lectures_count,
+        //                //period = model.period,
+        //                //start_date = model.start_date,
+        //                //start_time = model.start_date.HasValue ? model.start_date.Value.TimeOfDay : DateTime.Now.TimeOfDay,
+        //                TeacherId = model.teacher_id,
+        //                Status = 1,
+        //                //te = model.teaching_mechanism,
+        //                //total_std = model.total_std,
+        //                re = ct
+
+        //            };
+        //            ScheduleLesson xx = new ScheduleLesson()
+        //            {
+
+        //                a = (model.live_type == "both" || model.live_type == "audio") ? true : false,
+        //                allow_video = (model.live_type == "both" || model.live_type == "video") ? true : false,
+        //                cdate = DateTime.Now,
+        //                cost = model.cost,
+        //                details = model.details,
+        //                lectures_count = model.lectures_count,
+        //                period = model.period,
+        //                start_date = model.start_date,
+        //                start_time = model.start_date.HasValue ? model.start_date.Value.TimeOfDay : DateTime.Now.TimeOfDay,
+        //                teacher_id = model.teacher_id,
+        //                status = 1,
+        //                te = model.teaching_mechanism,
+        //                total_std = model.total_std,
+        //                Course_Times = ct
+
+        //            };
+        //            db.Courses.Add(c);
+        //            db.SaveChanges();
+        //            return getMessage(Enums.MStatus.check, "", "Index", "Course");
+
+
+        //        }
         public ActionResult Edit(int? id)
         {
 
-            List<sp_get_courses_Result> c = _cour.getcoursesBasic(null,null,id,null,null);
+            List<sp_get_courses_Result> c = _cour.getcoursesBasic(null, null, id, null, null);
             return View(c);
 
         }
@@ -171,17 +171,14 @@ namespace PrivateLessonMS.Areas.Admin.Controllers
 
         }
 
-        //public ActionResult deactive(int? id)
-        //{
+        public ActionResult deactive(int? id)
+        {
 
 
-        //        Course c = db.Courses.Where(w => w.Id == id).FirstOrDefault();
-        //        c.status = -1;
-        //        db.Entry(c).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return getMessage(Enums.MStatus.check, "", "Index", "Courses");
+            _cour.UpdateCourseStatus(null, id, 0);
+            return getMessage(Enums.MStatus.check, "", "Index", "Courses");
 
-        //}
+        }
         public ActionResult Active(int? id)
         {
 

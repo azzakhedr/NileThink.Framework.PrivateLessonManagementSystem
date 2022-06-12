@@ -82,19 +82,50 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
             }
             var checkAccount = await UserManager.FindByNameAsync(model.userName);
             if (checkAccount == null)
-                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.NotRegisterUser, false, null));
+            {
+                var studentData = _StudentBll.GetStudentEmail(model.userName);
+                if (studentData == null)
+                {
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.NotRegisterUser, false, null));
+                }
+                else
+                {
+                    return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, null, true,
+                         new RegisterResponseModel()
+                         {
+                             // expired = 14,
+                             fullName = studentData.FirstName + " " + studentData.LastName,
+                             //token = await GetToken(user),
+                             email = studentData.Email,
+                             //allowNotify = user.allow_notify,
+                             id = studentData.StudentId,
+                             firstName = studentData.FirstName,
+                             lastName = studentData.LastName,
+                             mobile = studentData.Mobile,
+                             role = "Student",
+                             //genderId = studentData.genderID.HasValue ? student.genderID.Value : false,
 
+                             isComplete = false,
+                             // absherNo = user.absher.HasValue ? user.absher : 0,
+                             online = true,
+                             IsNeedActivate = true,
+                             //photo = URL + "/resources/users/" + user.photo
+                         }));
+                }
+            }
             var user = await UserManager.FindAsync(checkAccount.UserName, model.password);
             if (user != null)
             {
                 var student = _StudentBll.Student_GetByUserId(user.Id);
                 if (user.status == -2 || user.status == -1)
                     return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.LockedUser, false, null));
+
+                //_StudentBll.StudentUpdateOnlineStatus(student.studentId, true);
                 return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, null, true,
                            new RegisterResponseModel()
                            {
                                expired = 14,
-                               fullName = user.fullname,
+                               fullName = student.firstName + " " + student.lastName,
                                token = await GetToken(user),
                                email = user.Email,
                                allowNotify = user.allow_notify,
@@ -103,6 +134,8 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                                lastName = student.lastName,
                                mobile = user.PhoneNumber,
                                role = "Student",
+                               genderId = student.genderID.HasValue ? student.genderID.Value : false,
+
                                isComplete = user.is_complete == 1 ? true : false,
                                absherNo = user.absher.HasValue ? user.absher : 0,
                                online = true,
@@ -128,7 +161,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
 
             string Lang = lang;
             var Student = _StudentBll.Student_GetById(StudentId);
-
+            Student.gender = Student.genderID == true ? Resource.Female : Resource.Male;
             if (Student != null)
             {
                 var user = UserManager.FindById(Student.userId);
@@ -176,6 +209,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                                    mobile = Student.mobile,
                                    district = Student.district,
                                    gender = Student.gender,
+                                   genderId = Student.genderID.HasValue ? Student.genderID.Value : false,
                                    id = StudentId,
                                    isComplete = user.is_complete == 1 ? true : false,
                                    lastName = Student.lastName,
@@ -184,7 +218,8 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                                    postalCode = !string.IsNullOrEmpty(Student.postalCode) ? Student.postalCode : "",
                                    streetNo = !string.IsNullOrEmpty(Student.streetNo) ? Student.streetNo : "",
                                    educationLevel = Education,
-                                   country = !String.IsNullOrEmpty(user.country) ? user.country : "0"
+                                   country = !String.IsNullOrEmpty(user.country) ? user.country : "0",
+                                   IsOnline = Student.IsOnline
                                }));
                 }
                 else
@@ -262,7 +297,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                           firstName = Student.firstName,
                           email = Student.email,
                           mobile = Student.mobile,
-                          gender = Student.genderID == true ? Resource.Female : Resource.Male,
+                          gender = Student.genderID.HasValue ? Student.genderID == true ? Resource.Female : Resource.Male : "",
                           id = Student.studentId,
                           postalCode = Student.postalCode,
                           streetNo = Student.streetNo,
@@ -291,7 +326,8 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
         }
         ///بحث عن معلم    .
         ///  /// </summary>zz
-        [Authorize]
+       // [Authorize]
+        [AllowAnonymous]
         [Route("AvailableTeachers")]
         public IHttpActionResult AvailableTeachers(AvailableTeacherVM ATeacher)
         {
@@ -329,7 +365,8 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                fullName = !string.IsNullOrEmpty(vm.FullName) ? vm.FullName : string.Format("{0} {1} ", vm.firstName, vm.lastName),
                email = vm.email,
                mobile = vm.mobile,
-               gender = vm.gender.HasValue ? vm.gender.Value == false ? "ذكر" : "أنثي" : "ذكر",
+               gender = vm.gender.HasValue ? vm.gender.Value == false ? Resource.Male : Resource.Female : "",
+               genderId = vm.gender.HasValue ? vm.gender.Value : false,
                id = vm.teacherId,
                isComplete = vm.isComplete,
                lastName = vm.lastName,
@@ -342,12 +379,13 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                absher = vm.absher,
                rate = vm.rate,
                teachingMechanism = !String.IsNullOrEmpty(vm.teachingMechanism) ? int.Parse(vm.teachingMechanism) : -1,
-               educationLevel = vm.educations.Select(VM => new EducationLevel()
-               {
-                   id = VM.id,
-                   name = VM.name
+               //educationLevel = vm.educations.Select(VM => new EducationLevel()
+               //{
+               //    id = VM.id,
+               //    name = VM.name
 
-               }).ToList(),
+               //}).ToList(),
+               EducationLevelTree = vm.EducationLevelTree,
                teacherTimes = vm.teacherAvailability.Select(VM => new teacherAvailability()
                {
                    dayOfWeek = VM.dayOfWeek,
@@ -366,12 +404,72 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                    name = VM.name
 
                }).ToList(),
-
+               IsOnline = vm.IsOnLine.HasValue ? vm.IsOnLine.Value : false,
+               membershipFees = vm.membershipFees,
+               membershipFromDate = vm.membershipFromDate,
+               membershipToDate = vm.membershipToDate,
+               membershipNameAr = vm.membershipNameAr,
+               membershipNameEn = vm.membershipNameEn,
+               IsMembership = vm.IsMembership
            }).ToList();
             return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, null, true, listTeachers));
         }
         ///اضافه درس   .
         ///  /// </summary>
+        //[Authorize]
+        //[Route("SendTeacherRequest")]
+        //public IHttpActionResult SendTeacherRequest(RequestCourceVM Request)
+        //{
+        //    string Lang = lang;
+
+        //    if (Request == null) return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.EnterServiceRequest, false, null));
+        //    else
+        //    {
+        //        if (Request.requestCourceDates == null) return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.EnterServiceRequest, false, null));
+        //    }
+        //    var Id = _RequestCource.RequestCourceAdd(Request);
+
+        //    if (Id >= 1)
+        //    {
+        //        var lst = _notificationBLL.GetNotificationToken(Request.teacherId, 2);
+        //        var teacher = _TeacherBll.Teacher_GetById(Request.teacherId);
+        //        var student = _StudentBll.Student_GetById(Request.studentId);
+        //        dynamic returndata = new
+        //        {
+        //            CourseId = Id,
+        //            teacherId = Request.teacherId,
+        //            teacherName = teacher.fullName,
+        //            studentId = Request.studentId,
+        //            studentName = student.fullName,
+        //            subject = Request.subject,
+
+        //            type = 1//طلب جديد
+        //        };
+        //        string NotificationMessage = JsonConvert.SerializeObject(returndata);
+        //        var title = "طلب جديد من الطالب";
+        //        _notificationBLL.InsertUserNotification(new NotificationVM() { course_id = Id, details = NotificationMessage, title = title, typeId = 1, userId = Request.teacherId, user_type = 2 });
+        //        foreach (var item in lst)
+        //        {
+        //            _comm.SendNotification(returndata, item.Token, 2, title);
+
+        //        }
+
+        //        return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.RequestSendedSuccessfully, true, new { Id = Id }));
+
+        //    }
+        //    else if (Id == -1)
+        //    {
+        //        return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.DateAlreadyReceirved, false, null));
+        //    }
+
+        //    else
+        //    {
+        //        return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.IncorrectData, false, null));
+        //    }
+
+        //}
+
+
         [Authorize]
         [Route("SendTeacherRequest")]
         public IHttpActionResult SendTeacherRequest(RequestCourceVM Request)
@@ -387,33 +485,16 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
 
             if (Id >= 1)
             {
-                var lst = _notificationBLL.GetNotificationToken(Request.teacherId, 2);
-                var teacher = _TeacherBll.Teacher_GetById(Request.teacherId);
-                var student = _StudentBll.Student_GetById(Request.studentId);
-                dynamic returndata = new
-                {
-                    CourseId = Id,
-                    teacherId = Request.teacherId,
-                    teacherName = teacher.fullName,
-                    studentId = Request.studentId,
-                    studentName = student.fullName,
-                    subject = Request.subject,
 
-                    type = 1//طلب جديد
-                };
-                string NotificationMessage = JsonConvert.SerializeObject(returndata);
-                var title = "طلب جديد من الطالب";
-                _notificationBLL.InsertUserNotification(new NotificationVM() { course_id = Id, details = NotificationMessage, title = title, typeId = 1, userId = Request.teacherId, user_type = 2 });
-                foreach (var item in lst)
-                {
-                    _comm.SendNotification(returndata, item.Token, 2, title);
-
-                }
-
-                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.RequestSendedSuccessfully, true, null));
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.RequestSendedSuccessfully, true, new { Id = Id }));
 
             }
             else if (Id == -1)
+            {
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.DateAlreadyReceirved, false, null));
+            }
+
+            else if (Id == -2)
             {
                 return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.DateAlreadyReceirved, false, null));
             }
@@ -429,7 +510,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
         /// </summary>
         /// <param name="rows"></param>
         /// <returns></returns>
-        [Authorize]
+        [AllowAnonymous]
         [Route("MyRequests")]
 
         [ResponseCodes(HttpStatusCode.OK)]
@@ -445,8 +526,9 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                 id = s.requestId,
                 createdDate = s.createdAt.ToString(),
                 pricePerHour = s.pricePerHour,
-                totalHours = s.totalPrice / s.pricePerHour,
+                totalHours = s.TotalHours.HasValue ? s.TotalHours.Value : 0,
                 totalPrice = s.totalPrice,
+                photo = !string.IsNullOrEmpty(s.photo) ? URL + "/resources/users/" + s.photo : null,
                 //details = s.details,
                 //material = s.material,
                 //period = s.period,
@@ -470,8 +552,11 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                 {
                     endDate = vm.endDate,
                     startDate = vm.startDate,
-                    requestId = s.requestId
-
+                    requestId = vm.requestId,
+                    id = vm.id,
+                    type = vm.Type.HasValue ? vm.Type.Value : 0,
+                    idFk = vm.idFk.HasValue ? vm.idFk.Value : 0,
+                    LiveUrl = vm.LessonObj != null ? vm.LessonObj.ConferanceZoom : ""
 
                 }).ToList()
 
@@ -480,7 +565,10 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                 EducationSublevelName = s.EducationSublevelName,
                 EducationLevelId = s.EducationLevelId,
                 EducationLevelName = s.EducationLevelName,
-                AddressName = s.AddressName
+
+                AddressName = s.AddressName,
+                specializationName = s.specializationName,
+                subSpecializationName = s.subSpecializationName
             }).ToList();
             return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "", true, items));
 
@@ -490,7 +578,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
 
         [ResponseCodes(HttpStatusCode.OK)]
         [HttpGet]
-        public IHttpActionResult MyCourses(int StudentId, int PageNo, int Records)
+        public IHttpActionResult MyCourses(int StudentId, int PageNo, int Records, int? SpecId = 0, int? SubSpecId = 0, int? LevelId = 0, int? SubLevelId = 0)
         {
 
             string Lang = lang;
@@ -498,7 +586,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
 
             var student = _StudentBll.Student_GetById(StudentId);
             //if (student.userId != User.Identity.GetUserId()) return this.ResponseUnauthorized(new ResponseViewModel(HttpStatusCode.Unauthorized, "", false, null));
-            var items = _Lessons.LessonsbyStudentId(StudentId, PageNo, Records).Select(s => new CourseModel()
+            var items = _Lessons.LessonsbyStudentId(StudentId, SpecId, SubSpecId, LevelId, SubLevelId, PageNo, Records).Select(s => new CourseModel()
             {
                 // conferanceZoom=s.conferanceZoom,
                 endDate = Convert.ToDateTime(s.endDate),
@@ -535,7 +623,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
             return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "", true, items));
 
         }
-        [Authorize]
+        [AllowAnonymous]
         [Route("CourseDetails")]
 
         [ResponseCodes(HttpStatusCode.OK)]
@@ -596,40 +684,51 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
             string Lang = lang;
             var student = _StudentBll.Student_GetById(Lesson.studentId);
             //if (student.userId != User.Identity.GetUserId()) return this.ResponseUnauthorized(new ResponseViewModel(HttpStatusCode.Unauthorized, "", false, null));
-            var items = _Lessons.LessonsbyStudentId(Lesson.studentId, Lesson.pageno, Lesson.records, Lesson.requestDate, Lesson.courseTime, Lesson.material, Lesson.teacherName, Lesson.TeachingMehod).Select(s => new CourseModel()
-            {
-                // conferanceZoom=s.conferanceZoom,
-                endDate = Convert.ToDateTime(s.endDate),
-                lessonId = s.lessonId,
-                requestDateId = Convert.ToInt32(s.requestDateId),
-                requestId = Convert.ToInt32(s.requestId),
-                startDate = Convert.ToDateTime(s.startDate),
-                conferanceZoom = s.studentZoom,
+            var items = _Lessons.LessonsbyStudentId(Lesson.studentId, Lesson.pageno, Lesson.records, Lesson.requestDate, Lesson.courseTime, Lesson.material, Lesson.teacherName, Lesson.TeachingMehod
+                , Lesson.spec_id, Lesson.sub_spec_id, Lesson.level_id, Lesson.sub_level_id
 
-                requestDetails = new NewRequestListViewModel()
+                )
+                .Select(s => new CourseModel()
                 {
+                    // conferanceZoom=s.conferanceZoom,
+                    endDate = Convert.ToDateTime(s.endDate),
+                    lessonId = s.lessonId,
+                    requestDateId = Convert.ToInt32(s.requestDateId),
+                    requestId = Convert.ToInt32(s.requestId),
+                    startDate = Convert.ToDateTime(s.startDate),
+                    conferanceZoom = s.studentZoom,
 
-                    id = s.RequestDetails.requestId,
-                    createdDate = DateTime.Now + "",
+                    requestDetails = new NewRequestListViewModel()
+                    {
 
-                    status = s.RequestDetails.courceStatus,
-                    studentId = s.RequestDetails.studentId,
-                    studentName = "",
-                    teacherId = s.RequestDetails.teacherId,
-                    teacherName = s.RequestDetails.teacherName,
-                    comment = s.RequestDetails.comment,
-                    subject = s.RequestDetails.subject,
-                    // photo = URL + "/resources/users/" +  : "default.png"),
-                    teachingMechanism = s.RequestDetails.teachingMechanism,
-                    statusId = s.RequestDetails.requestStatusId,
-                    teachingMechanismStatus = s.RequestDetails.teachingMechanismStatus,
-                    liveType = "video",
-                    Longitude = s.RequestDetails.longitude.ToString(),
-                    Latitude = s.RequestDetails.latitude.ToString(),
-                }
+                        id = s.RequestDetails.requestId,
+                        createdDate = DateTime.Now + "",
+
+                        status = s.RequestDetails.courceStatus,
+                        studentId = s.RequestDetails.studentId,
+                        studentName = "",
+                        teacherId = s.RequestDetails.teacherId,
+                        teacherName = s.RequestDetails.teacherName,
+                        comment = s.RequestDetails.comment,
+                        subject = s.RequestDetails.subject,
+                        // photo = URL + "/resources/users/" +  : "default.png"),
+                        teachingMechanism = s.RequestDetails.teachingMechanism,
+                        statusId = s.RequestDetails.requestStatusId,
+                        teachingMechanismStatus = s.RequestDetails.teachingMechanismStatus,
+                        liveType = "video",
+                        Longitude = s.RequestDetails.longitude.ToString(),
+                        Latitude = s.RequestDetails.latitude.ToString(),
+                        SubLevelId = s.RequestDetails.SubLevelId,
+                        EducationLevelId = s.RequestDetails.EducationLevelId,
+                        EducationLevelName = s.RequestDetails.EducationLevelName,
+                        EducationSublevelName = s.RequestDetails.EducationSublevelName,
+                        specializationName = s.RequestDetails.specializationName,
+                        subSpecializationName = s.RequestDetails.subSpecializationName
+
+                    }
 
 
-            }).ToList();
+                }).ToList();
             return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "", true, items));
 
         }
@@ -688,12 +787,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                         photo = URL + "/resources/users/" + (string.IsNullOrEmpty(Teacher.photo) ? "default.png" : Teacher.photo),
                         absher = !string.IsNullOrEmpty(Teacher.absherNo) ? int.Parse(Teacher.absherNo) : 0,
                         online = Teacher.online.HasValue ? Teacher.online.Value : false,
-                        educationLevel = Teacher.educationLevel.Select(vm => new EducationLevel()
-                        {
-                            id = vm.id,
-                            name = vm.name
-
-                        }).ToList(),
+                        educationLevelTree = Teacher.educationLevelTree.ToList(),
                         teacherAvailability = Teacher.teacherAvailability.Select(vm => new teacherAvailability()
                         {
                             dayOfWeek = vm.dayOfWeek,
@@ -853,8 +947,24 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
 
         }
 
+        [HttpGet]
+        [Authorize]
+        [Route("GetStudentsReserveRequest")]
+        public IHttpActionResult GetStudentsReserveRequest(int Id)
+        {
+            string Lang = lang;
+            if (Id >= 1)
+            {
+                var lst = _RequestCource.GeAllStuentReserveTeacherCourse(Id);
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "", true, lst));
 
+            }
+            else
+            {
+                return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.IncorrectData, false, null));
+            }
 
+        }
 
 
 
@@ -876,6 +986,29 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
 
                 return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, Resource.ErrorOccure, false, e.Message));
             }
+
+        }
+
+
+
+        [Authorize]
+        [Route("UpdateOnlineStatus")]
+        [HttpPost]
+        public IHttpActionResult UpdateOnlineStatus(bool IsOnline)
+        {
+            string Lang = lang;
+            string user_id = User.Identity.GetUserId();
+            var student = _StudentBll.Student_GetByUserId(user_id);
+            if (student != null)
+            {
+                _StudentBll.StudentUpdateOnlineStatus(student.studentId, IsOnline);
+            }
+            else
+            {
+                return this.ResponseNotFound(new ResponseViewModel(HttpStatusCode.NotFound, "", false, ""));
+            }
+
+            return this.ResponseOK(new ResponseViewModel(HttpStatusCode.OK, "", true, null));
 
         }
     }

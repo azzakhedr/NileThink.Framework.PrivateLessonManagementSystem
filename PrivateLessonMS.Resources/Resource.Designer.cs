@@ -61,6 +61,15 @@ namespace PrivateLessonMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to user already activated.
+        /// </summary>
+        public static string AlreadyActivated {
+            get {
+                return ResourceManager.GetString("AlreadyActivated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t Evaluate.
         /// </summary>
         public static string CanNotEvaluate {
@@ -268,6 +277,15 @@ namespace PrivateLessonMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not Found.
+        /// </summary>
+        public static string NotFound {
+            get {
+                return ResourceManager.GetString("NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not Found Teacher.
         /// </summary>
         public static string NotFoundTeacher {
@@ -282,6 +300,15 @@ namespace PrivateLessonMS.Resources {
         public static string NotRegisterUser {
             get {
                 return ResourceManager.GetString("NotRegisterUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package already Paid Before.
+        /// </summary>
+        public static string PaidBefore {
+            get {
+                return ResourceManager.GetString("PaidBefore", resourceCulture);
             }
         }
         

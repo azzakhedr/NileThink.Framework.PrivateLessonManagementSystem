@@ -73,7 +73,7 @@ namespace PrivateLessonMS.Areas.Admin.Controllers
 
         public ActionResult Packages()
         {
-            var lst = _pack.GetAllPackages(null,null);
+            var lst = _pack.GetAllPackages(null, null);
             return View(lst);
         }
 
@@ -102,8 +102,9 @@ namespace PrivateLessonMS.Areas.Admin.Controllers
         [HttpPost]
         public async Task<ActionResult> SendNotificationFcm(int? Type, string subject, string Title)
         {
-            var lst = _notificationBLL.GetNotificationToken(Type);
-            var title = Title;
+
+            var lst = _notificationBLL.GetUserNotificationToken( 0);
+
             foreach (var item in lst)
             {
                 dynamic returndata = new
@@ -113,7 +114,15 @@ namespace PrivateLessonMS.Areas.Admin.Controllers
                     type = 10// رسالة من لوحة التحكم
                 };
                 string NotificationMessage = JsonConvert.SerializeObject(returndata);
-                SendNotification(returndata, item.Token, 10, title);
+
+
+
+                _notificationBLL.InsertUserNotification(new NotificationVM() { details = NotificationMessage, title = Title, typeId = 10, userId = item.user_id, user_type = item.user_type });
+                if (!String.IsNullOrEmpty(item.Token))
+                {
+                    SendNotification(returndata, item.Token, 10, Title);
+                }
+
             }
             return getMessage(Enums.MStatus.check, "", "SendNotificationFcm", "Dashboard");
         }

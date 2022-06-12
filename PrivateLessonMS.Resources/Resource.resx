@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AlreadyActivated" xml:space="preserve">
+    <value>user already activated</value>
+  </data>
   <data name="CanNotEvaluate" xml:space="preserve">
     <value>Can't Evaluate</value>
   </data>
@@ -186,11 +189,17 @@
   <data name="NotAuthorized" xml:space="preserve">
     <value> Not Authrized</value>
   </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Not Found</value>
+  </data>
   <data name="NotFoundTeacher" xml:space="preserve">
     <value>Not Found Teacher</value>
   </data>
   <data name="NotRegisterUser" xml:space="preserve">
     <value>This user is not registered</value>
+  </data>
+  <data name="PaidBefore" xml:space="preserve">
+    <value>Package already Paid Before</value>
   </data>
   <data name="PasswordChangeSuccessfully" xml:space="preserve">
     <value>Password Changed Successfully</value>

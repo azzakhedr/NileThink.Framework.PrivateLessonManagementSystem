@@ -33,9 +33,6 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
 {
     public class CommonController : BaseController
     {
-
-
-
         public string SendNotification(dynamic obj, string deviceToken, int type, string title)
         {
             try
@@ -54,13 +51,10 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                 WebHeaderCollection headerCollection = webRequest.Headers;
                 ServicePointManager.Expect100Continue = true;
                 ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
-                            | SecurityProtocolType.Tls11
-                            | SecurityProtocolType.Tls12;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
                 webRequest.Method = "POST";
                 webRequest.Headers["Authorization"] = "Key=" + AppID;
                 webRequest.Headers.Add(string.Format("Sender: id={0}", senderId));
-
                 string Data = "{\r\n\"to\":\"" + deviceToken + "\",\r\n \"data\" : {\r\n  \"sound\" : \"default\"";
                 if (obj != null)
                 {
@@ -70,7 +64,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                     }
                 }
                 Data = Data + ",\r\n  \"title\" : \"" + title + "\",\r\n  \"content_available\" : true,\r\n  \"type\" : \"" + type.ToString() + "\",\r\n  \"priority\" : \"high\"\r\n }\r\n";
-                Data = Data+ ",\r\n \"notification\" : {\r\n  \"sound\" : \"default\"";
+                Data = Data + ",\r\n \"notification\" : {\r\n  \"sound\" : \"default\"";
                 if (obj != null)
                 {
                     foreach (var item in obj.GetType().GetProperties())
@@ -79,7 +73,7 @@ namespace NileThink.Framework.PrivateLessonManagementSystem.Web.Controllers.Api
                     }
                 }
                 Data = Data + ",\r\n  \"title\" : \"" + title + "\",\r\n  \"content_available\" : true,\r\n  \"type\" : \"" + type.ToString() + "\",\r\n  \"priority\" : \"high\"\r\n }\r\n";
-                
+
                 Data = Data + "}";
 
                 webRequest.ContentType = contentType;

@@ -232,6 +232,7 @@
     <Compile Include="Areas\Teacher\Controllers\RequestsController.cs" />
     <Compile Include="Areas\Teacher\TeacherAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdvertiseBannersController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MailerController.cs" />
@@ -668,6 +669,12 @@
     <Content Include="Areas\Admin\Views\Teachers\EditTeacherPackage.cshtml" />
     <Content Include="Areas\Admin\Views\Teachers\AssignTeacherPackage.cshtml" />
     <Content Include="Areas\Admin\Views\Dashboard\SendNotificationFcm.cshtml" />
+    <Content Include="Areas\Admin\Views\AdvertiseBanners\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\AdvertiseBanners\AddEdit.cshtml" />
+    <Content Include="Areas\Admin\Views\Settings\CertificateTypes.cshtml" />
+    <Content Include="Areas\Admin\Views\Settings\MembershipPackages.cshtml" />
+    <Content Include="Areas\Admin\Views\Settings\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\Settings\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -705,6 +712,7 @@
     <Content Include="Views\Home\ResetPassword.cshtml" />
     <Content Include="Views\Home\PaymentNotify.cshtml" />
     <Content Include="Views\Home\SendNotification.cshtml" />
+    <Content Include="Views\AdvertiseBanners\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -18,7 +18,7 @@
                             <i class="la la-gear"></i>
                         </span>
                         <h3 class="m-portlet__head-text">
-                            المراحل التدريسية الفرعية
+                            المستويات الفرعية
                         </h3>
                     </div>
                 </div>
@@ -31,18 +31,19 @@
                                 <div class="form-group m-form__group row align-items-center">
                                     <div class="col-md-4">
                                         <div class="m-form__label">
-                                            <label> عنوان المرحلة</label>
+                                            <label> المستوى الفرعى</label>
                                         </div>
-                                        <input type="text" class="form-control m-input" required placeholder="عنوان المرحلة" name="name" value="@(ViewBag.item !=null ?ViewBag.item.name:"" )">
+                                        <input type="text" class="form-control m-input" required placeholder="عنوان المستوى الفرعى" name="name" value="@(ViewBag.item !=null ?ViewBag.item.name:"" )">
                                     </div>
                                     <div class="col-md-4">
                                         <div class="m-form__label">
-                                            <label> المرحلة الرئيسية التابع له</label>
+                                            <label> المستوى الرئيسي التابع له</label>
                                         </div>
                                         <select class="form-control m-input" name="mainId">
-                                            @foreach(var item in ViewBag.list)
+                                            <option value="">-- اختر --</option>
+                                            @foreach (var item in ViewBag.list)
                                             {
-                                                <option value="@item.id" required @(ViewBag.mainId !=null && ViewBag.mainId== item.id?"selected":"" )>@item.name</option>
+                                                <option value="@item.id" required @(ViewBag.mainId != null && ViewBag.mainId == item.id ? "selected" : "" )>@item.name</option>
                                             }
 
                                         </select>
@@ -66,8 +67,8 @@
                     <thead>
                         <tr>
                             <th title="Field #1" data-field="userId">رقم</th>
-                            <th title="Field #2" data-field="Owner">عنوان المرحلة</th>
-                            <th title="Field #2" data-field="Owner">المرحلة الرئيسية</th>
+                            <th title="Field #2" data-field="Owner">المستوى الفرعى</th>
+                            <th title="Field #2" data-field="Owner">المستوى الرئيسي</th>
                             <th title="Field #10" data-field="Actions">العمليات</th>
                         </tr>
                     </thead>

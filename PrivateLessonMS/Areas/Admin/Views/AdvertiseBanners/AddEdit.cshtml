@@ -1,0 +1,221 @@
+﻿@using NileThink.Framework.PrivateLessonManagementSystem.BLL.ViewModels
+@model AdvertiseBannersVM
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin2.cshtml";
+}
+
+
+
+
+<div class="row">
+    <div id="status_message" class="col-lg-12">@Html.Action(actionName: "TempMessage", controllerName: "Shared", routeValues: new { area = "" })</div>
+    <div class="col-lg-12">
+
+        <!--begin::Portlet-->
+        <div class="m-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    .
+                    <div class="m-portlet__head-title">
+                        <span class="m-portlet__head-icon m--hide">
+                            <i class="la la-gear"></i>
+                        </span>
+                        <h3 class="m-portlet__head-text">
+                            @(Model!=null&&Model.Id>0?"تعديل":"إضافة")
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <!--begin::Form-->
+            <form class="m-form m-form--fit" id="banner-form" action="@Url.Action("AddEdit")" method="post" enctype="multipart/form-data">
+                <div class="m-portlet__body">
+                    <div class="m-form__section m-form__section--first">
+
+                        <div class="m-form__heading">
+                            <h3 class="m-form__heading-title">بيانات البانر </h3>
+                        </div>
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-12">
+                                <label for="example_input_full_name">الرابط </label>
+                                <input type="text" class="form-control m-input" name="link" value="@(Model!=null&&Model.Id>0?Model.link:"")" required>
+                                <input type="hidden" name="Id" value="@(Model!=null&&Model.Id>0?Model.Id:0)" />
+                            </div>
+
+                        </div>
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-6">
+                                <label for="exampleInputEmail1">الصورة </label>
+                                <div></div>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="customFile" name="photo_file">
+                                    <label class="custom-file-label selected" for="customFile"></label>
+                                    <span class="m-form__help">يسمح فقط بصورة بصيغة PNG JPG </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <img src="@(Model!=null&&Model.Id>0?"/resources/users/"+Model.photo_img:"")" style="width:320px;height:50px;" />
+                            </div>
+                        </div>
+                        <input type="hidden" id="is_top_teacher_index1" name="is_top_teacher_index1" value=" @(Model != null && Model.Id > 0 && Model.is_top_teacher_index == true ? 1 : 0)" />
+                        <input type="hidden" id="is_top_teacher_profile1" name="is_top_teacher_profile1" value=" @(Model != null && Model.Id > 0 && Model.is_top_teacher_profile == true ? 1 : 0)" />
+                        <input type="hidden" id="is_top_request1" name="is_top_request1" value=" @(Model != null && Model.Id > 0 && Model.is_top_request == true ? 1 : 0)" />
+                        <input type="hidden" id="is_active1" name="is_active1" value=" @(Model != null && Model.Id > 0 && Model.IsActive == true ? 1 : 0)" />
+
+
+
+
+
+                        <input type="hidden" id="photo_img" name="photo_img" value="@(Model!=null&&Model.Id>0?Model.photo_img:"")" />
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-12">
+                                <div class="m-checkbox-list">
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" id="is_top_teacher_index" name="is_top_teacher_index" value="1" @(Model != null && Model.Id > 0 && Model.is_top_teacher_index == true ? "checked" : "")> يظهر أعلي قائمة المعلمين
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" id="is_top_teacher_profile" name="is_top_teacher_profile" value="2" @(Model != null && Model.Id > 0 && Model.is_top_teacher_profile == true ? "checked" : "")> يظهر أعلي بروفايل المعلم
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" id="is_top_request" name="is_top_request" value="3" @(Model != null && Model.Id > 0 && Model.is_top_request == true ? "checked" : "")> يظهر أعلي الطلب
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-12">
+                                <div class="m-checkbox-list">
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" id="is_active" name="is_active" value="1" @(Model != null && Model.Id > 0 && Model.IsActive == true ? "checked" : "")> مفعل
+                                        <span></span>
+                                    </label>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row">
+                            <div class="col-md-6">
+                                <label>من تاريخ</label>
+                                <input type="text" required class="form-control m-input datepickerx" name="from_date" id="" autocomplete="off" value="@(Model!=null&&Model.Id>0 ? Model.from_date.ToString("yyyy-MM-dd"):"")">
+                            </div>
+                            <div class="col-md-6">
+                                <label>إلى تاريخ</label>
+                                <input type="text" required class="form-control m-input datepickery" name="to_time" id="" autocomplete="off" value="@(Model!=null&&Model.Id>0 ? Model.to_time.ToString("yyyy-MM-dd"):"")">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="m-portlet__foot m-portlet__no-border m-portlet__foot--fit">
+                    <div class="m-form__actions m-form__actions--solid">
+                        <button type="submit" id="submitForm" class="btn btn-success">حفظ المتغيرات</button>
+                        <button type="reset" class="btn btn-secondary">الغاء الأمر</button>
+                    </div>
+                </div>
+            </form>
+
+            <!--end::Form-->
+        </div>
+
+        <!--end::Portlet-->
+    </div>
+</div>
+@section scripts{
+    <script src="~/assets/demo/default/custom/crud/forms/widgets/bootstrap-datetimepicker.js" type="text/javascript"></script>
+
+
+    <script>
+        //$(document).ready(function () {
+        //    jQuery.validator.addMethod("greaterThan",
+        //        function (value, element, params) {
+        //            debugger;
+        //            if (!/Invalid|NaN/.test(new Date(value))) {
+        //                return new Date(value) > new Date($(params).val());
+        //            }
+
+        //            return isNaN(value) && isNaN($(params).val())
+        //                || (Number(value) > Number($(params).val()));
+        //        }, 'لابد أن يكون أكبر من  {0}.');
+        //    $("#submitForm").validate({
+        //        rules: {
+        //            to_time: { greaterThan: "#from_date" }
+        //        }
+        //    });
+        //});
+
+        //$('#submitForm').click(function (e) {
+        //    e.preventDefault();
+
+
+        //});
+        var photoCorrectDimension = false;
+        var _URL = window.URL || window.webkitURL;
+        $("#customFile").change(function (e) {
+            var file, img;
+            if ((file = this.files[0])) {
+                img = new Image();
+                var objectUrl = _URL.createObjectURL(file);
+                img.onload = function () {
+                    if (!(this.width == 320 && this.height == 50)) {
+                        photoCorrectDimension = false;
+                        alert("أبعاد الصوره لابد أن تكون 320*50");
+                        return false;
+                    }
+                    else {
+                        photoCorrectDimension = true;
+                        _URL.revokeObjectURL(objectUrl);
+                    }
+                };
+                debugger;
+                img.src = objectUrl;
+            }
+        });
+
+
+
+
+
+        $(".datepickerx").datepicker({ format: "yyyy-mm-dd", todayHighlight: !0, forceParse: 0 });
+        $(".datepickery").datepicker({ format: "yyyy-mm-dd", forceParse: 0 });
+
+        $('#is_top_teacher_index').change(function () {
+            if (this.checked) {
+                $('#is_top_teacher_index1').val(1);
+            } else {
+                $('#is_top_teacher_index1').val(0);
+            }
+        });
+        $('#is_top_teacher_profile').change(function () {
+            if (this.checked) {
+                $('#is_top_teacher_profile1').val(1);
+            } else {
+                $('#is_top_teacher_profile1').val(0);
+            }
+        });
+        $('#is_top_request').change(function () {
+            if (this.checked) {
+                $('#is_top_request1').val(1);
+            } else {
+                $('#is_top_request1').val(0);
+            }
+        });
+
+        $('#is_active').change(function () {
+            if (this.checked) {
+                $('#is_active1').val(1);
+            } else {
+                $('#is_active1').val(0);
+            }
+        });
+    </script>
+}
+

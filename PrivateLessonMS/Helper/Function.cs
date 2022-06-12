@@ -98,6 +98,31 @@ namespace PrivateLessonMS.Helper
             }
             return Tuple.Create(true, "");
         }
+
+        public static Tuple<bool, string> ValidateBannerImage(HttpPostedFileBase file, bool restrict = true)
+        {
+            if (file == null) return Tuple.Create(false, "لا يوجد صورة");
+            if (!IsImage(file)) return Tuple.Create(false, "يرجى ان يتم اختيار صورة صحيحة [" + string.Join(",", Extensions) + "]");
+            if (file.ContentLength <= 0) return Tuple.Create(false, "لا يمكن قبول ملف حجمه صفر");
+            if (restrict)
+            {
+                string maxImageSize = ConfigurationManager.AppSettings["MaxImageSize"];
+                int size = int.Parse(maxImageSize.Replace("mb", "")) * 1048576;
+
+                if (file.ContentLength > size)
+                    return Tuple.Create(false, "حجم الملف يجب ان يكون أقل من أو يساوي   " + maxImageSize);
+
+                Image img = Image.FromStream(file.InputStream);
+
+                int w = 320;// int.Parse(minWidth.Replace("px", ""));
+                int h = 50;// int.Parse(minHeight.Replace("px", ""));
+                if (img.Width != w || img.Height != h)
+                    return Tuple.Create(false, "أبعاد الصورة لابد أن تكون بين  " + w + " * " + h + " بيكسل");
+                img.Dispose();
+                file.InputStream.Position = 0;
+            }
+            return Tuple.Create(true, "");
+        }
         public static bool IsImage(HttpPostedFileBase file)
         {
             if (file.ContentType.Contains("image")) return true;
